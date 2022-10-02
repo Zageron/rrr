@@ -1,8 +1,34 @@
 [package]
-name = "wasm"
+name = "rrr_wasm"
 version = "0.1.0"
 edition = "2021"
+authors = ["Zageron <hello@zageron.ca>"]
+publish = false
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[lib]
+crate-type = ["cdylib"]
+
+[features]
+optimize = ["log/release_max_level_warn"]
+default = ["optimize"]
 
 [dependencies]
+log = "0.4"
+pixels = { git = "https://github.com/parasyte/pixels.git", branch = "main" }
+winit = "0.26"
+winit_input_helper = "0.12"
+
+[target.'cfg(target_arch = "wasm32")'.dependencies]
+console_error_panic_hook = "0.1"
+console_log = "0.2"
+wasm-bindgen = "0.2"
+wasm-bindgen-futures = "0.4"
+web-sys = "0.3"
+wgpu = { version = "0.13", features = ["webgl"] }
+
+[target.'cfg(not(target_arch = "wasm32"))'.dependencies]
+env_logger = "0.9"
+pollster = "0.2"
+
+[dev-dependencies]
+wasm-bindgen-test = "0.3.33"

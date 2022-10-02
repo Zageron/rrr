@@ -1,0 +1,37 @@
+[tasks.wasm_clean]
+script_runner = "@shell"
+script = '''
+rm -rf web/bin ||:
+'''
+
+[tasks.clean]
+command = "cargo"
+args = ["clean"]
+dependencies = ["wasm_clean"]
+
+[tasks.format]
+disabled = true
+
+[tasks.test]
+command = "wasm-pack"
+args = ["test", "--firefox"]
+
+[tasks.crate]
+command = "cargo"
+args = ["build", "--release", "--target", "wasm32-unknown-unknown"]
+
+[tasks.build]
+command = "wasm-bindgen"
+args = [
+    "--out-dir",
+    "web/bin",
+    "--target",
+    "web",
+    "${CARGO_MAKE_CRATE_TARGET_DIRECTORY}/wasm32-unknown-unknown/release/${CARGO_MAKE_CRATE_NAME}.wasm",
+]
+dependencies = ["wasm_clean", "crate"]
+
+[tasks.serve]
+command = "miniserve"
+args = ["web", "--port", "17645", "--index", "index.html"]
+dependencies = ["build"]
