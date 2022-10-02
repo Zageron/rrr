@@ -1,0 +1,14 @@
+[package]
+name = "rrr_window"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+rrr_config = { path = "../rrr_config" }
+serde = { version = "1.0.145", features = ["derive"], optional = true }
+
+[target.'cfg(unix)'.dependencies]
+winit = { version = "0.27.3", default-features = false, features = ['x11'] }
+
+[target.'cfg(windows)'.dependencies]
+winit = { version = "0.27.3", default-features = false }
