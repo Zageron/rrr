@@ -4,7 +4,6 @@ use crossterm::{
     terminal::{disable_raw_mode, enable_raw_mode, EnterAlternateScreen, LeaveAlternateScreen},
 };
 use rrr_config::Config;
-use rrr_window;
 use std::sync::mpsc::{self, Sender};
 use std::thread;
 use std::{

@@ -6,7 +6,6 @@
     unreachable_pub,
     variant_size_differences,
     clippy::all,
-    clippy::cargo,
     clippy::pedantic,
     clippy::as_conversions,
     clippy::clone_on_ref_ptr,
