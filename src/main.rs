@@ -12,7 +12,7 @@ struct Cli {
     command: Commands,
 }
 
-#[derive(Subcommand)]
+#[derive(Subcommand, Debug)]
 enum Commands {
     /// Start playing a chart immediately!
     Play(Play),
@@ -29,8 +29,6 @@ struct Play {
 fn main() {
     let cli = Cli::parse();
 
-    // You can check for the existence of subcommands, and if found use their
-    // matches just as you would the top level cmd
     match &cli.command {
         Commands::Play(id) => {
             println!("Opens the game to play song id {:?}", id);
@@ -39,4 +37,10 @@ fn main() {
             let _res = rrr_tui::init();
         }
     }
+}
+
+#[test]
+fn verify_cli() {
+    use clap::CommandFactory;
+    Cli::command().debug_assert()
 }
