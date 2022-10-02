@@ -1,0 +1,12 @@
+[package]
+name = "rrr_settings"
+version = "0.1.0"
+edition = "2021"
+
+[features]
+default = ["serde"]
+serde = ["dep:serde", "rrr_settings_core/serde"]
+
+[dependencies]
+rrr_settings_core = { path = "../rrr_settings_core" }
+serde = { version = "1.0.145", features = ["derive"], optional = true }

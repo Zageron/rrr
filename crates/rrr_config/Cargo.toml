@@ -3,10 +3,5 @@ name = "rrr_config"
 version = "0.1.0"
 edition = "2021"
 
-[features]
-default = ["serde"]
-serde = ["dep:serde", "core_config/serde"]
-
 [dependencies]
-core_config = { path = "../core_config" }
 serde = { version = "1.0.145", features = ["derive"], optional = true }

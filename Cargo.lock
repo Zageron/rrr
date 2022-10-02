@@ -75,13 +75,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "core_config"
-version = "0.1.0"
-dependencies = [
- "serde",
-]
-
-[[package]]
 name = "crossterm"
 version = "0.25.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -257,13 +250,15 @@ dependencies = [
 name = "rrr_config"
 version = "0.1.0"
 dependencies = [
- "core_config",
  "serde",
 ]
 
 [[package]]
 name = "rrr_core"
 version = "0.1.0"
+dependencies = [
+ "rrr_settings_core",
+]
 
 [[package]]
 name = "rrr_internal"
@@ -272,6 +267,21 @@ version = "0.1.0"
 [[package]]
 name = "rrr_render"
 version = "0.1.0"
+
+[[package]]
+name = "rrr_settings"
+version = "0.1.0"
+dependencies = [
+ "rrr_settings_core",
+ "serde",
+]
+
+[[package]]
+name = "rrr_settings_core"
+version = "0.1.0"
+dependencies = [
+ "serde",
+]
 
 [[package]]
 name = "rrr_tui"

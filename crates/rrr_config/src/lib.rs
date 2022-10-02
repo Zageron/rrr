@@ -1,29 +1,24 @@
-use core_config::CoreSettings;
-use std::convert::From;
-
 #[cfg(feature = "serde")]
 use serde::{Deserialize, Serialize};
 
-impl From<Settings> for CoreSettings {
-    fn from(item: Settings) -> Self {
-        CoreSettings::from(item.core)
-    }
-}
-
-/// Stores RRR settings to start charts with.
+/// Window configuration
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
-pub struct Settings {
-    pub core: CoreSettings,
-    pub note_offset: i32,
+pub struct Config {
+    pub width: u32,
+    pub height: u32,
+    pub window_x: u32,
+    pub window_y: u32,
 }
 
-impl Default for Settings {
+impl Default for Config {
     #[must_use]
     fn default() -> Self {
         Self {
-            core: CoreSettings::default(),
-            note_offset: 0,
+            width: 768,
+            height: 512,
+            window_x: 0,
+            window_y: 0,
         }
     }
 }
@@ -33,18 +28,7 @@ mod tests {
     use super::*;
 
     #[test]
-    fn default_settings() {
-        let _settings = Settings::default();
-    }
-
-    #[test]
-    fn from_settings_to_core() {
-        let settings = Settings {
-            core: CoreSettings { judge_offset: 100 },
-            note_offset: -100,
-        };
-
-        let core_settings: CoreSettings = settings.into();
-        assert_eq!(settings.core, core_settings);
+    fn default_config() {
+        let _config = Config::default();
     }
 }
