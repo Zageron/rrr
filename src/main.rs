@@ -1,7 +1,5 @@
 use clap::{Args, Parser, Subcommand};
 use rrr_config::Config;
-use rrr_tui;
-use rrr_window;
 
 #[derive(Parser)]
 #[command(name = "rrr")]

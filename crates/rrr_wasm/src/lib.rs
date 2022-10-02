@@ -1,5 +1,6 @@
 #![deny(clippy::all)]
 #![forbid(unsafe_code)]
+#![allow(unused)]
 
 use pixels::{Pixels, SurfaceTexture};
 use std::rc::Rc;
