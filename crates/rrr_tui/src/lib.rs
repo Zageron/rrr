@@ -90,7 +90,7 @@ impl<'a> App<'a> {
 pub fn init() -> Result<(), Box<dyn Error>> {
     let (tx, rx) = mpsc::channel();
 
-    thread::spawn(move || {
+    let terminal_join = thread::spawn(move || {
         // setup terminal
         let _res = enable_raw_mode();
         let mut stdout = io::stdout();
@@ -120,6 +120,10 @@ pub fn init() -> Result<(), Box<dyn Error>> {
     loop {
         if let Ok(message) = rx.try_recv() {
             rrr_window::init(Config::default(), message.try_into().unwrap());
+            break;
+        }
+
+        if terminal_join.is_finished() {
             break;
         }
     }
