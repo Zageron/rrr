@@ -19,10 +19,12 @@ name = "rrr"
 path = "src/main.rs"
 
 [features]
-default = ["tui"]
+default = ["tui", "window"]
 tui = ["rrr_tui"]
+window = ["rrr_window"]
 
 [dependencies]
 clap = { version = "4.0.8", features = ["derive"] }
 rrr_config = { path = "crates/rrr_config" }
 rrr_tui = { path = "crates/rrr_tui", version = "0.1.0", optional = true }
+rrr_window = { path = "crates/rrr_window", optional = true }

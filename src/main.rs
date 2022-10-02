@@ -1,5 +1,7 @@
 use clap::{Args, Parser, Subcommand};
+use rrr_config::Config;
 use rrr_tui;
+use rrr_window;
 
 #[derive(Parser)]
 #[command(name = "rrr")]
@@ -30,9 +32,7 @@ fn main() {
     let cli = Cli::parse();
 
     match &cli.command {
-        Commands::Play(id) => {
-            println!("Opens the game to play song id {:?}", id);
-        }
+        Commands::Play(args) => rrr_window::init(Config::default(), args.song_id),
         Commands::Tui => {
             let _res = rrr_tui::init();
         }
