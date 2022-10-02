@@ -618,6 +618,8 @@ name = "rrr_tui"
 version = "0.1.0"
 dependencies = [
  "crossterm",
+ "rrr_config",
+ "rrr_window",
  "tui",
  "unicode-width",
 ]
