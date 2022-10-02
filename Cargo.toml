@@ -24,4 +24,5 @@ tui = ["rrr_tui"]
 
 [dependencies]
 clap = { version = "4.0.8", features = ["derive"] }
+rrr_config = { path = "crates/rrr_config" }
 rrr_tui = { path = "crates/rrr_tui", version = "0.1.0", optional = true }

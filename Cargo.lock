@@ -75,6 +75,13 @@ dependencies = [
 ]
 
 [[package]]
+name = "core_config"
+version = "0.1.0"
+dependencies = [
+ "serde",
+]
+
+[[package]]
 name = "crossterm"
 version = "0.25.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -242,8 +249,29 @@ name = "rrr"
 version = "0.2.0"
 dependencies = [
  "clap",
+ "rrr_config",
  "rrr_tui",
 ]
+
+[[package]]
+name = "rrr_config"
+version = "0.1.0"
+dependencies = [
+ "core_config",
+ "serde",
+]
+
+[[package]]
+name = "rrr_core"
+version = "0.1.0"
+
+[[package]]
+name = "rrr_internal"
+version = "0.1.0"
+
+[[package]]
+name = "rrr_render"
+version = "0.1.0"
 
 [[package]]
 name = "rrr_tui"
@@ -259,6 +287,26 @@ name = "scopeguard"
 version = "1.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d29ab0c6d3fc0ee92fe66e2d99f700eab17a8d57d1c1d3b748380fb20baa78cd"
+
+[[package]]
+name = "serde"
+version = "1.0.145"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "728eb6351430bccb993660dfffc5a72f91ccc1295abaa8ce19b27ebe4f75568b"
+dependencies = [
+ "serde_derive",
+]
+
+[[package]]
+name = "serde_derive"
+version = "1.0.145"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "81fa1584d3d1bcacd84c277a0dfe21f5b0f6accf4a23d04d4c6d61f1af522b4c"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn",
+]
 
 [[package]]
 name = "signal-hook"
@@ -364,6 +412,10 @@ name = "wasi"
 version = "0.11.0+wasi-snapshot-preview1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "9c8d87e72b64a3b4db28d11ce29237c246188f4f51057d65a7eab63b7987e423"
+
+[[package]]
+name = "wasm"
+version = "0.1.0"
 
 [[package]]
 name = "winapi"
