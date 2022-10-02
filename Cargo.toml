@@ -1,0 +1,28 @@
+[workspace]
+members = ["crates/*"]
+exclude = [""]
+
+[package]
+name = "rrr"
+version = "0.2.0"
+authors = ["Zageron <hello@adambryant.ca>"]
+description = "Browser successor to FFR."
+homepage = "https://github.com/flashflashrevolution/rrr"
+repository = "https://github.com/flashflashrevolution/rrr"
+readme = "readme.markdown"
+license = "AGPL-3.0"
+edition = "2021"
+publish = false
+rust-version = "1.66.0"
+
+[[bin]]
+name = "rrr"
+path = "src/main.rs"
+
+[features]
+default = ["tui"]
+tui = ["rrr_tui"]
+
+[dependencies]
+clap = { version = "4.0.8", features = ["derive"] }
+rrr_tui = { path = "crates/rrr_tui", version = "0.1.0", optional = true }
