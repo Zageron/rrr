@@ -34,4 +34,21 @@ dependencies = ["wasm_clean", "crate"]
 [tasks.serve]
 command = "miniserve"
 args = ["web", "--port", "17645", "--index", "index.html"]
-dependencies = ["build"]
+
+[tasks.watch]
+command = "cargo"
+args = [
+    "watch",
+    "-w",
+    "../..",
+    "-i",
+    ".git",
+    "-i",
+    "target/*",
+    "-i",
+    ".vscode",
+    "-i",
+    "web/",
+    "-s",
+    "cargo make build",
+]
