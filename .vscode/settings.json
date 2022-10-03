@@ -1,0 +1,10 @@
+{
+    "files.insertFinalNewline": true,
+    "files.eol": "\n",
+    "rust-analyzer.checkOnSave.enable": true,
+    "rust-analyzer.checkOnSave.command": "clippy",
+    "rust-analyzer.checkOnSave.extraArgs": [
+        "--no-deps"
+    ],
+    "task.allowAutomaticTasks": "on",
+}
