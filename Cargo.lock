@@ -1663,6 +1663,13 @@ name = "rrr_internal"
 version = "0.1.0"
 
 [[package]]
+name = "rrr_math"
+version = "0.1.0"
+dependencies = [
+ "num-traits",
+]
+
+[[package]]
 name = "rrr_render"
 version = "0.1.0"
 
