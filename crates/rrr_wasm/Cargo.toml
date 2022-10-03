@@ -1,9 +1,14 @@
 [package]
 name = "rrr_wasm"
+description = "Wasm library for rendering to a web canvas."
 version = "0.1.0"
-edition = "2021"
 authors = ["Zageron <hello@zageron.ca>"]
+homepage = "https://github.com/flashflashrevolution/rrr"
+repository = "https://github.com/flashflashrevolution/rrr"
+license = "AGPL-3.0"
+edition = "2021"
 publish = false
+rust-version = "1.66.0"
 
 [lib]
 crate-type = ["cdylib"]
