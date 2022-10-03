@@ -15,8 +15,8 @@ default = ["optimize"]
 [dependencies]
 log = "0.4"
 pixels = { git = "https://github.com/parasyte/pixels.git", branch = "main" }
-winit = "0.26"
-winit_input_helper = "0.12"
+winit = "0.27.3"
+winit_input_helper = "0.13.0"
 
 [target.'cfg(target_arch = "wasm32")'.dependencies]
 console_error_panic_hook = "0.1"
