@@ -1,0 +1,16 @@
+[package]
+name = "rrr_chart"
+version = "0.1.0"
+edition = "2021"
+
+[features]
+default = ["serde"]
+serde = ["dep:serde"]
+
+[dependencies]
+anyhow = "1.0.65"
+log = "0.4.17"
+serde = { version = "1.0.145", features = ["derive"], optional = true }
+strum = { version = "0.24.1", features = ["derive"] }
+swf = "0.2.0"
+thiserror = "1.0.36"
