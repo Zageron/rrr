@@ -10,6 +10,7 @@ use command::Command;
 #[command(version = "1.0")]
 #[command(propagate_version = true)]
 #[command(about = "Interface for interacting with RRR.", long_about = None)]
+#[command(arg_required_else_help(true))]
 pub struct Cli {
     #[command(subcommand)]
     command: Option<Command>,
