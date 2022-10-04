@@ -25,6 +25,7 @@ window = ["rrr_window"]
 
 [dependencies]
 clap = { version = "4.0.9", features = ["derive"] }
+clap_complete = "4.0.2"
 rrr_config = { path = "crates/rrr_config" }
 rrr_tui = { path = "crates/rrr_tui", optional = true }
 rrr_window = { path = "crates/rrr_window", optional = true }
