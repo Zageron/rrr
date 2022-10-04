@@ -1,4 +1,8 @@
+mod completions;
+
+use clap::CommandFactory;
 use clap::{Args, Parser, Subcommand};
+use completions::Shell;
 use rrr_config::Config;
 
 #[derive(Parser)]
@@ -19,6 +23,9 @@ enum Commands {
 
     /// Start the user interface.
     Tui,
+
+    /// Generate completions for your shell.
+    Completions(Shell),
 }
 
 #[derive(Args, Debug)]
@@ -34,6 +41,7 @@ fn main() {
         Commands::Tui => {
             let _res = rrr_tui::init();
         }
+        Commands::Completions(shell) => completions::process(&shell.shell, &mut Cli::command()),
     }
 }
 
