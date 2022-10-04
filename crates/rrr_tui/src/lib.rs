@@ -1,3 +1,4 @@
+use anyhow::Result;
 use crossterm::{
     event::{self, DisableMouseCapture, EnableMouseCapture, Event, KeyCode},
     execute,
@@ -7,7 +8,6 @@ use rrr_config::Config;
 use std::sync::mpsc::{self, Sender};
 use std::thread;
 use std::{
-    error::Error,
     io,
     time::{Duration, Instant},
 };
@@ -86,7 +86,7 @@ impl<'a> App<'a> {
     fn on_tick(&mut self) {}
 }
 
-pub fn init() -> Result<(), Box<dyn Error>> {
+pub fn init() -> Result<()> {
     let (tx, rx) = mpsc::channel();
 
     let terminal_join = thread::spawn(move || {

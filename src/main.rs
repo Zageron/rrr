@@ -1,52 +1,35 @@
-mod completions;
+mod command;
 
-use clap::CommandFactory;
-use clap::{Args, Parser, Subcommand};
-use completions::Shell;
-use rrr_config::Config;
+use anyhow::Result;
+use clap::Parser;
+use command::Command;
 
-#[derive(Parser)]
+#[derive(Debug, Parser)]
 #[command(name = "rrr")]
 #[command(author = "Zageron <hello@zageron.ca>")]
 #[command(version = "1.0")]
 #[command(propagate_version = true)]
 #[command(about = "Interface for interacting with RRR.", long_about = None)]
-struct Cli {
+pub struct Cli {
     #[command(subcommand)]
-    command: Commands,
+    command: Option<Command>,
 }
 
-#[derive(Subcommand, Debug)]
-enum Commands {
-    /// Start playing a chart immediately!
-    Play(Play),
-
-    /// Start the user interface.
-    Tui,
-
-    /// Generate completions for your shell.
-    Completions(Shell),
-}
-
-#[derive(Args, Debug)]
-struct Play {
-    song_id: u16,
-}
-
-fn main() {
-    let cli = Cli::parse();
-
-    match &cli.command {
-        Commands::Play(args) => rrr_window::init(Config::default(), args.song_id),
-        Commands::Tui => {
-            let _res = rrr_tui::init();
+impl Cli {
+    pub fn run(self) -> Result<()> {
+        match self.command {
+            None => Err(anyhow::anyhow!("Please choose a valid command.")),
+            Some(command) => command.run(),
         }
-        Commands::Completions(shell) => completions::process(&shell.shell, &mut Cli::command()),
     }
+}
+
+fn main() -> Result<()> {
+    Cli::parse().run()
 }
 
 #[test]
 fn verify_cli() {
     use clap::CommandFactory;
-    Cli::command().debug_assert()
+    Cli::command().debug_assert();
 }
