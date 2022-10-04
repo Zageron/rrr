@@ -1,0 +1,4 @@
+[tasks.docs]
+workspace = false
+command = "cargo"
+args = ["doc", "--all-features", "--no-deps", "--workspace"]
