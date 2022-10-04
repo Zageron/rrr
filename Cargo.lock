@@ -1759,6 +1759,7 @@ checksum = "f1382d1f0a252c4bf97dc20d979a2fdd05b024acd7c2ed0f7595d7817666a157"
 name = "rrr"
 version = "0.2.0"
 dependencies = [
+ "anyhow",
  "clap",
  "clap_complete",
  "rrr_config",
@@ -1855,6 +1856,7 @@ dependencies = [
 name = "rrr_tui"
 version = "0.1.0"
 dependencies = [
+ "anyhow",
  "crossterm",
  "rrr_config",
  "rrr_window",
