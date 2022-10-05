@@ -1,5 +1,6 @@
-use std::cell::RefCell;
+#![allow(dead_code)]
 
+use std::cell::RefCell;
 use crate::fetch::BytesFetch;
 use anyhow::Result;
 use futures::channel::{oneshot, oneshot::Receiver};
@@ -7,7 +8,6 @@ use gloo_net::http::Request;
 use gloo_worker::{Spawnable, WorkerBridge};
 use serde::Deserialize;
 use wasm_bindgen::prelude::*;
-
 use gloo_worker::{HandlerId, Worker, WorkerScope};
 use wasm_bindgen_futures::spawn_local;
 
@@ -61,7 +61,7 @@ pub struct Fetcher {
 }
 
 impl Fetcher {
-    pub fn new(chart_id: usize) -> Self {
+    pub fn new(_chart_id: usize) -> Self {
         let (tx, rx) = oneshot::channel();
         let tx = RefCell::new(Some(tx));
         let bridge = FetchWorker::spawner()

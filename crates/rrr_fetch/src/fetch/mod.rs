@@ -4,7 +4,7 @@ use self::playlist::{Song, Stat};
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 pub mod playlist;
-pub use imp::platform::Fetcher;
+pub use imp::platform::*;
 
 // type BytesFetch = Result<std::option::Option<bytes::Bytes>>;
 #[derive(Serialize, Deserialize)]
