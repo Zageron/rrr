@@ -2179,6 +2179,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "rrr_time"
+version = "0.1.0"
+dependencies = [
+ "wasm-bindgen-test",
+ "web-sys",
+]
+
+[[package]]
 name = "rrr_tui"
 version = "0.1.0"
 dependencies = [
