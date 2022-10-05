@@ -2,3 +2,18 @@
 workspace = false
 command = "cargo"
 args = ["doc", "--all-features", "--no-deps", "--workspace"]
+
+[tasks.build_wasm]
+workspace = false
+command = "cargo"
+args = ["make", "--cwd", "crates/rrr_wasm", "build"]
+
+[tasks.build_release]
+workspace = false
+extend = "build"
+args = ["build", "--release"]
+
+[tasks.install]
+workspace = false
+command = "cargo"
+args = ["install", "--path", "."]
