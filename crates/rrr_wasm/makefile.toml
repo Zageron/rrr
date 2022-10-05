@@ -16,6 +16,11 @@ disabled = true
 command = "wasm-pack"
 args = ["test", "--firefox"]
 
+[tasks.check]
+clear = true
+command = "cargo"
+args = ["check", "--target", "wasm32-unknown-unknown"]
+
 [tasks.crate]
 command = "cargo"
 args = ["build", "--release", "--target", "wasm32-unknown-unknown"]
