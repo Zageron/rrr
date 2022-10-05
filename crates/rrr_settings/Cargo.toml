@@ -10,10 +10,6 @@ edition = "2021"
 publish = false
 rust-version = "1.66.0"
 
-[features]
-default = ["serde"]
-serde = ["dep:serde", "rrr_settings_core/serde"]
-
 [dependencies]
 rrr_settings_core = { path = "../rrr_settings_core" }
-serde = { version = "1.0.145", features = ["derive"], optional = true }
+serde = { version = "1.0.145", features = ["derive"] }
