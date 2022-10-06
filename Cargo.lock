@@ -2204,18 +2204,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "rr_noteskin"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "image",
- "log",
- "rrr_chart",
- "rrr_render",
- "strum",
-]
-
-[[package]]
 name = "rrr"
 version = "0.2.0"
 dependencies = [
@@ -2315,6 +2303,18 @@ name = "rrr_math"
 version = "0.1.0"
 dependencies = [
  "num-traits",
+]
+
+[[package]]
+name = "rrr_noteskin"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "image",
+ "log",
+ "rrr_chart",
+ "rrr_render",
+ "strum",
 ]
 
 [[package]]
