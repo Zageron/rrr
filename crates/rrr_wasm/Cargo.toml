@@ -19,7 +19,8 @@ crate-type = ["cdylib"]
 
 [features]
 optimize = ["log/release_max_level_warn"]
-default = ["optimize"]
+develop = ["log/release_max_level_info"]
+default = ["develop"]
 
 [dependencies]
 console_error_panic_hook = "0.1.7"
@@ -28,12 +29,17 @@ gloo-worker = "0.2.1"
 log = "0.4.17"
 pixels = { git = "https://github.com/parasyte/pixels.git", branch = "main" }
 rrr_fetch = { path = "../rrr_fetch" }
+rrr_render = { path = "../rrr_render" }
 wasm-bindgen = "0.2.83"
 wasm-bindgen-futures = "0.4.33"
-web-sys = "0.3.60"
 wgpu = { version = "0.13.1", features = ["webgl"] }
 winit = "0.27.3"
 winit_input_helper = "0.13.0"
+
+[dependencies.web-sys]
+version = "0.3.60"
+features = ["HtmlCanvasElement"]
+
 
 [dev-dependencies]
 wasm-bindgen-test = "0.3.33"

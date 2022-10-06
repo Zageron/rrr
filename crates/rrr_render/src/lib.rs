@@ -5,10 +5,12 @@ use pixels::{
 
 pub mod sprites;
 
+#[derive(Debug)]
 pub struct Renderer {
     pub pixels: Pixels,
 }
 
+#[derive(Debug)]
 pub struct RendererBuilder<'win, W: HasRawWindowHandle> {
     color: Color,
     width: u32,

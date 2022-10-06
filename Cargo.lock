@@ -2300,6 +2300,13 @@ dependencies = [
 ]
 
 [[package]]
+name = "rrr_game"
+version = "0.1.0"
+dependencies = [
+ "rrr_render",
+]
+
+[[package]]
 name = "rrr_internal"
 version = "0.1.0"
 
@@ -2364,6 +2371,7 @@ dependencies = [
  "log",
  "pixels",
  "rrr_fetch",
+ "rrr_render",
  "wasm-bindgen",
  "wasm-bindgen-futures",
  "wasm-bindgen-test",
