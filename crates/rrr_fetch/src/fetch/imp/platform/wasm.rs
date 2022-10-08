@@ -1,14 +1,14 @@
 #![allow(dead_code)]
 
-use std::cell::RefCell;
 use crate::fetch::BytesFetch;
 use anyhow::Result;
 use futures::channel::{oneshot, oneshot::Receiver};
 use gloo_net::http::Request;
+use gloo_worker::{HandlerId, Worker, WorkerScope};
 use gloo_worker::{Spawnable, WorkerBridge};
 use serde::Deserialize;
+use std::cell::RefCell;
 use wasm_bindgen::prelude::*;
-use gloo_worker::{HandlerId, Worker, WorkerScope};
 use wasm_bindgen_futures::spawn_local;
 
 #[derive(Debug)]
