@@ -11,4 +11,7 @@ publish = false
 rust-version = "1.64.0"
 
 [dependencies]
+rrr_core = { path = "../rrr_core" }
+rrr_input = { path = "../rrr_input" }
 rrr_render = { path = "../rrr_render" }
+rrr_settings = { path = "../rrr_settings" }

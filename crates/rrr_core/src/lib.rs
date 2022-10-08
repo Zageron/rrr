@@ -46,6 +46,10 @@ pub mod judge;
 pub mod record;
 pub mod turntable;
 
+pub mod prelude {
+    pub use rrr_settings_core::CoreSettings;
+}
+
 use self::{
     actions::NoteAction,
     field::Field,

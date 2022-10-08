@@ -2292,7 +2292,10 @@ dependencies = [
 name = "rrr_game"
 version = "0.1.0"
 dependencies = [
+ "rrr_core",
+ "rrr_input",
  "rrr_render",
+ "rrr_settings",
 ]
 
 [[package]]
