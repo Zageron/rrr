@@ -14,7 +14,7 @@ disabled = true
 
 [tasks.test]
 command = "wasm-pack"
-args = ["test", "--firefox"]
+args = ["test", "--headless", "--chrome"]
 
 [tasks.check]
 clear = true
