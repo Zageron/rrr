@@ -16,12 +16,6 @@ pub struct Window {
     pub window: winit::window::Window,
 }
 
-impl Drop for Window {
-    fn drop(&mut self) {
-        println!("Dropping RRR window.");
-    }
-}
-
 impl Window {
     pub fn new(config: Config) -> Result<Window> {
         let event_loop = EventLoopBuilder::new().with_any_thread(true).build();
@@ -67,15 +61,13 @@ impl Window {
 
                 winit::event::Event::LoopDestroyed => {}
 
-                winit::event::Event::WindowEvent { window_id, event } => match event {
-                    winit::event::WindowEvent::Resized(size) => {
-                        println!("Resized to: {:?}", size)
-                    }
-                    winit::event::WindowEvent::Moved(position) => {
-                        println!("Moved to: {:?}", position)
-                    }
+                winit::event::Event::WindowEvent {
+                    window_id: _,
+                    event,
+                } => match event {
+                    winit::event::WindowEvent::Resized(_size) => {}
+                    winit::event::WindowEvent::Moved(_position) => {}
                     winit::event::WindowEvent::CloseRequested => {
-                        log::info!("Exiting.");
                         control_flow.set_exit();
                     }
                     winit::event::WindowEvent::Destroyed => {}
@@ -83,19 +75,12 @@ impl Window {
                     winit::event::WindowEvent::HoveredFile(_) => {}
                     winit::event::WindowEvent::HoveredFileCancelled => {}
                     winit::event::WindowEvent::ReceivedCharacter(_) => {}
-                    winit::event::WindowEvent::Focused(focused) => {
-                        println!("Window {:?} focused: {:?}", window_id, focused);
-                    }
+                    winit::event::WindowEvent::Focused(_focused) => {}
                     winit::event::WindowEvent::KeyboardInput {
-                        device_id,
+                        device_id: _,
                         input,
-                        is_synthetic,
+                        is_synthetic: _,
                     } => {
-                        println!(
-                            "Keybaord input: {:?} | {:?} | {:?}",
-                            device_id, input, is_synthetic
-                        );
-
                         if let winit::event::ElementState::Pressed = input.state {
                             if let Some(virtual_keycode) = input.virtual_keycode {
                                 rrr.hit(key_hit::Builder::with_key_code(
@@ -136,9 +121,7 @@ impl Window {
                         value: _,
                     } => {}
                     winit::event::WindowEvent::Touch(touch) => {
-                        if touch.phase == TouchPhase::Ended {
-                            println!("Input recieved.");
-                        }
+                        if touch.phase == TouchPhase::Ended {}
                     }
                     winit::event::WindowEvent::ScaleFactorChanged {
                         scale_factor: _,
