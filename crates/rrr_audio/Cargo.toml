@@ -24,10 +24,8 @@ rb = "0.4.1"
 symphonia = { version = "0.5.1", default-features = false, features = ["mp3"] }
 
 [target.'cfg(not(all(target_arch = "wasm32", target_os = "unknown")))'.dependencies]
-cpal = { git = "https://github.com/RustAudio/cpal.git" }
+cpal = "0.14.0"
 
 [target.'cfg(all(target_arch = "wasm32", target_os = "unknown"))'.dependencies]
 console_error_panic_hook = "0.1.7"
-cpal = { git = "https://github.com/RustAudio/cpal.git", features = [
-    "wasm-bindgen",
-] }
+cpal = { version = "0.14.0", features = ["wasm-bindgen"] }
