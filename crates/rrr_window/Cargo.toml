@@ -11,7 +11,11 @@ publish = false
 rust-version = "1.66.0"
 
 [dependencies]
+anyhow = "1.0.65"
+log = "0.4.17"
 rrr_config = { path = "../rrr_config" }
+rrr_game = { path = "../rrr_game" }
+rrr_input = { path = "../rrr_input" }
 serde = { version = "1.0.145", features = ["derive"] }
 
 [target.'cfg(unix)'.dependencies]

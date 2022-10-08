@@ -2211,7 +2211,9 @@ dependencies = [
  "anyhow",
  "clap",
  "clap_complete",
+ "futures",
  "rrr_config",
+ "rrr_game",
  "rrr_tui",
  "rrr_window",
 ]
@@ -2363,8 +2365,7 @@ version = "0.1.0"
 dependencies = [
  "anyhow",
  "crossterm",
- "rrr_config",
- "rrr_window",
+ "futures",
  "tui",
  "unicode-width",
 ]
@@ -2393,7 +2394,11 @@ dependencies = [
 name = "rrr_window"
 version = "0.1.0"
 dependencies = [
+ "anyhow",
+ "log",
  "rrr_config",
+ "rrr_game",
+ "rrr_input",
  "serde",
  "winit",
 ]

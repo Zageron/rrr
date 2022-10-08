@@ -1,6 +1,8 @@
 use anyhow::Result;
 use clap::Parser;
 use rrr_config::Config;
+use rrr_game::{prelude::rrr_render, RustRustRevolutionBuilder, SongID};
+use rrr_window::Window;
 
 #[derive(Debug, Parser)]
 pub struct Args {
@@ -10,7 +12,16 @@ pub struct Args {
 
 impl Args {
     pub fn run(&self) -> Result<()> {
-        rrr_window::init(Config::default(), self.song_id);
+        let config = Config::default();
+        let mut window = Window::new(config)?;
+        let renderer = futures::executor::block_on(async {
+            rrr_render::RendererBuilder::new(config.width, config.height, &window.window)
+                .build()
+                .await
+        })?;
+        let mut rrr =
+            RustRustRevolutionBuilder::with_renderer(renderer).build(SongID(self.song_id));
+        window.run_once(&mut rrr);
         Ok(())
     }
 }

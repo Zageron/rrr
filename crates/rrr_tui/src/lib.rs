@@ -4,13 +4,15 @@ use crossterm::{
     execute,
     terminal::{disable_raw_mode, enable_raw_mode, EnterAlternateScreen, LeaveAlternateScreen},
 };
-use rrr_config::Config;
-use std::sync::mpsc::{self, Sender};
-use std::thread;
 use std::{
-    io,
+    io::{self, BufRead, BufReader},
     time::{Duration, Instant},
 };
+use std::{
+    process::Command,
+    sync::mpsc::{self, Sender},
+};
+use std::{process::Stdio, thread};
 use tui::{
     backend::{Backend, CrosstermBackend},
     layout::{Alignment, Constraint, Direction, Layout},
@@ -117,12 +119,33 @@ pub fn init() -> Result<()> {
     });
 
     loop {
-        if let Ok(message) = rx.try_recv() {
-            rrr_window::init(Config::default(), message.try_into().unwrap());
-            break;
+        let p = if let Ok(song_id) = rx.try_recv() {
+            Some(
+                Command::new("rrr")
+                    .arg("play")
+                    .arg(song_id.to_string())
+                    .stdout(Stdio::piped())
+                    .spawn()
+                    .unwrap(),
+            )
+        } else {
+            None
+        };
+
+        if let Some(mut process) = p {
+            match process.stdout.as_mut() {
+                Some(out) => {
+                    let buf_reader = BufReader::new(out);
+                    for line in buf_reader.lines().flatten() {
+                        println!("results: {:?}", line)
+                    }
+                }
+                None => todo!(),
+            }
         }
 
         if terminal_join.is_finished() {
+            println!("we done here");
             break;
         }
     }

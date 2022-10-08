@@ -27,7 +27,9 @@ window = ["rrr_window"]
 anyhow = "1.0.65"
 clap = { version = "4.0.10", features = ["derive"] }
 clap_complete = "4.0.2"
+futures = "0.3.24"
 rrr_config = { path = "crates/rrr_config" }
+rrr_game = { path = "crates/rrr_game" }
 rrr_tui = { path = "crates/rrr_tui", optional = true }
 rrr_window = { path = "crates/rrr_window", optional = true }
 
