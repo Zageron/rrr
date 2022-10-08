@@ -58,3 +58,7 @@ args = [
     "-s",
     "cargo make build",
 ]
+
+[tasks.dev]
+clear = true
+run_task = { name = ["watch", "serve"], fork = true }
