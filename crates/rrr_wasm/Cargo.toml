@@ -40,9 +40,5 @@ winit_input_helper = "0.13.0"
 version = "0.3.60"
 features = ["HtmlCanvasElement"]
 
-
 [dev-dependencies]
 wasm-bindgen-test = "0.3.33"
-
-[profile.release]
-opt-level = "s"

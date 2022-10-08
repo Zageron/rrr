@@ -30,3 +30,12 @@ clap_complete = "4.0.2"
 rrr_config = { path = "crates/rrr_config" }
 rrr_tui = { path = "crates/rrr_tui", optional = true }
 rrr_window = { path = "crates/rrr_window", optional = true }
+
+[profile.release]
+opt-level = 3
+
+[profile.dev.package.rrr_wasm]
+opt-level = "s"
+
+[profile.release.package.rrr_wasm]
+opt-level = "s"
