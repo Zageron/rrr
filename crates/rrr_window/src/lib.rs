@@ -1,6 +1,6 @@
 use anyhow::{anyhow, Result};
 use rrr_config::Config;
-use rrr_game::{key_hit, Rendered, RustRustRevolution};
+use rrr_game::{hit_action, Rendered, RustRustRevolution};
 use rrr_input::KeyCode;
 use winit::{
     dpi::{PhysicalPosition, PhysicalSize},
@@ -35,6 +35,8 @@ impl Window {
     }
 
     pub fn run_once(&mut self, rrr: &mut RustRustRevolution<Rendered>) {
+        self.window.focus_window();
+
         self.event_loop.run_return(move |event, _, control_flow| {
             control_flow.set_poll();
 
@@ -83,7 +85,7 @@ impl Window {
                     } => {
                         if let winit::event::ElementState::Pressed = input.state {
                             if let Some(virtual_keycode) = input.virtual_keycode {
-                                rrr.hit(key_hit::Builder::with_key_code(
+                                rrr.hit(hit_action::Builder::with_key_code(
                                     virtual_key_code_to_key_code(virtual_keycode),
                                 ));
                             }
