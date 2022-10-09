@@ -2368,6 +2368,10 @@ dependencies = [
  "anyhow",
  "crossterm",
  "futures",
+ "rrr_config",
+ "rrr_game",
+ "rrr_render",
+ "rrr_window",
  "tui",
  "unicode-width",
 ]

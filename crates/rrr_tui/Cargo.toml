@@ -14,5 +14,9 @@ rust-version = "1.66.0"
 anyhow = "1.0.65"
 crossterm = "0.25.0"
 futures = "0.3.24"
+rrr_config = { path = "../rrr_config" }
+rrr_game = { path = "../rrr_game" }
+rrr_render = { path = "../rrr_render" }
+rrr_window = { path = "../rrr_window" }
 tui = "0.19.0"
 unicode-width = "0.1"

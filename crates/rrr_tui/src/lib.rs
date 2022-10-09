@@ -4,15 +4,18 @@ use crossterm::{
     execute,
     terminal::{disable_raw_mode, enable_raw_mode, EnterAlternateScreen, LeaveAlternateScreen},
 };
+use rrr_config::Config;
+use rrr_game::{prelude::SongID, RustRustRevolutionBuilder};
+use rrr_window::{
+    prelude::{EventLoopBuilder, EventLoopExtRunReturn},
+    Window,
+};
+use std::sync::mpsc::{self, Sender};
+use std::thread;
 use std::{
-    io::{self, BufRead, BufReader},
+    io,
     time::{Duration, Instant},
 };
-use std::{
-    process::Command,
-    sync::mpsc::{self, Sender},
-};
-use std::{process::Stdio, thread};
 use tui::{
     backend::{Backend, CrosstermBackend},
     layout::{Alignment, Constraint, Direction, Layout},
@@ -72,11 +75,11 @@ impl<T> StatefulList<T> {
 /// Check the drawing logic for items on how to specify the highlighting style for selected items.
 struct App<'a> {
     items: StatefulList<(&'a str, usize)>,
-    sender: Sender<u32>,
+    sender: Sender<u16>,
 }
 
 impl<'a> App<'a> {
-    fn new(sender: Sender<u32>) -> App<'a> {
+    fn new(sender: Sender<u16>) -> App<'a> {
         App {
             items: StatefulList::with_items(vec![("Song 1", 1), ("Song 2", 2)]),
             sender,
@@ -118,34 +121,29 @@ pub fn init() -> Result<()> {
         }
     });
 
+    let mut event_loop = EventLoopBuilder::new().build();
     loop {
-        let p = if let Ok(song_id) = rx.try_recv() {
-            Some(
-                Command::new("rrr")
-                    .arg("play")
-                    .arg(song_id.to_string())
-                    .stdout(Stdio::piped())
-                    .spawn()
-                    .unwrap(),
-            )
-        } else {
-            None
-        };
-
-        if let Some(mut process) = p {
-            match process.stdout.as_mut() {
-                Some(out) => {
-                    let buf_reader = BufReader::new(out);
-                    for line in buf_reader.lines().flatten() {
-                        println!("results: {:?}", line)
-                    }
-                }
-                None => todo!(),
+        if let Ok(song_id) = rx.try_recv() {
+            {
+                let config = Config::default();
+                let mut window = Window::new(config, &mut event_loop)?;
+                let renderer = futures::executor::block_on(async {
+                    rrr_render::RendererBuilder::new(config.width, config.height, &window.window)
+                        .build()
+                        .await
+                })?;
+                let mut rrr =
+                    RustRustRevolutionBuilder::with_renderer(renderer).build(SongID(song_id));
+                window.run_once(&mut rrr);
             }
+
+            // Make sure window is dropped by running run_return again.
+            event_loop.run_return(move |_event, _, control_flow| {
+                control_flow.set_exit();
+            });
         }
 
         if terminal_join.is_finished() {
-            println!("we done here");
             break;
         }
     }

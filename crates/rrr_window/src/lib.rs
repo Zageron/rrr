@@ -5,27 +5,32 @@ use rrr_input::KeyCode;
 use winit::{
     dpi::{PhysicalPosition, PhysicalSize},
     event::{TouchPhase, VirtualKeyCode},
-    event_loop::{EventLoop, EventLoopBuilder},
+    event_loop::EventLoop,
     platform::run_return::EventLoopExtRunReturn,
-    platform::windows::EventLoopBuilderExtWindows,
     window::WindowBuilder,
 };
 
-pub struct Window {
-    event_loop: EventLoop<()>,
+pub mod prelude {
+    pub use winit::{
+        event_loop::{EventLoop, EventLoopBuilder},
+        platform::run_return::EventLoopExtRunReturn,
+    };
+}
+
+pub struct Window<'e> {
+    event_loop: &'e mut EventLoop<()>,
     pub window: winit::window::Window,
 }
 
-impl Window {
-    pub fn new(config: Config) -> Result<Window> {
-        let event_loop = EventLoopBuilder::new().with_any_thread(true).build();
+impl<'e> Window<'e> {
+    pub fn new(config: Config, event_loop: &'e mut EventLoop<()>) -> Result<Window> {
         let size = PhysicalSize::new(config.width, config.height);
         let window = match WindowBuilder::new()
             .with_title("Rust Rust Revolution")
             .with_inner_size(size)
             .with_resizable(false)
             .with_position(PhysicalPosition::new(config.window_x, config.window_y))
-            .build(&event_loop)
+            .build(event_loop)
         {
             Ok(window) => window,
             Err(e) => return Err(anyhow!("Unable to create window: {:?}", e)),

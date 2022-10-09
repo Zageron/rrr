@@ -2,7 +2,7 @@ use anyhow::Result;
 use clap::Parser;
 use rrr_config::Config;
 use rrr_game::{prelude::rrr_render, prelude::SongID, RustRustRevolutionBuilder};
-use rrr_window::Window;
+use rrr_window::{prelude::EventLoopBuilder, Window};
 
 #[derive(Debug, Parser)]
 pub struct Args {
@@ -13,7 +13,8 @@ pub struct Args {
 impl Args {
     pub fn run(&self) -> Result<()> {
         let config = Config::default();
-        let mut window = Window::new(config)?;
+        let mut event_loop = EventLoopBuilder::new().build();
+        let mut window = Window::new(config, &mut event_loop)?;
         let renderer = futures::executor::block_on(async {
             rrr_render::RendererBuilder::new(config.width, config.height, &window.window)
                 .build()
