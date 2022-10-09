@@ -25,7 +25,7 @@ window = ["rrr_window"]
 
 [dependencies]
 anyhow = "1.0.65"
-clap = { version = "4.0.10", features = ["derive"] }
+clap = { version = "4.0.11", features = ["derive"] }
 clap_complete = "4.0.2"
 futures = "0.3.24"
 rrr_config = { path = "crates/rrr_config" }
