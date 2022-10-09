@@ -1,7 +1,7 @@
 use anyhow::Result;
 use clap::Parser;
 use rrr_config::Config;
-use rrr_game::{prelude::rrr_render, RustRustRevolutionBuilder, SongID};
+use rrr_game::{prelude::rrr_render, prelude::SongID, RustRustRevolutionBuilder};
 use rrr_window::Window;
 
 #[derive(Debug, Parser)]

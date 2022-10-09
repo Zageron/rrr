@@ -1,6 +1,7 @@
 mod imp;
 
 use self::playlist::{Song, Stat};
+use rrr_types::SongID;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 pub mod playlist;
@@ -48,6 +49,6 @@ pub struct Chart {
     pub time: String,
 }
 
-pub fn download_chart(chart_id: usize) -> Fetcher {
-    Fetcher::new(chart_id)
+pub fn download_chart(song_id: SongID) -> Fetcher {
+    Fetcher::new(song_id)
 }

@@ -2283,6 +2283,7 @@ dependencies = [
  "gloo-worker",
  "log",
  "reqwest",
+ "rrr_types",
  "serde",
  "wasm-bindgen",
  "wasm-bindgen-futures",
@@ -2298,6 +2299,7 @@ dependencies = [
  "rrr_input",
  "rrr_render",
  "rrr_settings",
+ "rrr_types",
 ]
 
 [[package]]
@@ -2369,6 +2371,10 @@ dependencies = [
  "tui",
  "unicode-width",
 ]
+
+[[package]]
+name = "rrr_types"
+version = "0.1.0"
 
 [[package]]
 name = "rrr_wasm"

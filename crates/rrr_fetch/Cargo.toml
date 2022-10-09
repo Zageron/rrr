@@ -14,6 +14,7 @@ rust-version = "1.66.0"
 anyhow = "1.0.65"
 log = "0.4.17"
 reqwest = { version = "0.11.12", features = ["json", "blocking", "stream"] }
+rrr_types = { path = "../rrr_types" }
 serde = { version = "1.0.145", features = ["derive"] }
 
 [target.'cfg(target_arch = "wasm32")'.dependencies]

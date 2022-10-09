@@ -15,3 +15,4 @@ rrr_core = { path = "../rrr_core" }
 rrr_input = { path = "../rrr_input" }
 rrr_render = { path = "../rrr_render" }
 rrr_settings = { path = "../rrr_settings" }
+rrr_types = { path = "../rrr_types" }

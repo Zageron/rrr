@@ -6,6 +6,7 @@ use futures::channel::{oneshot, oneshot::Receiver};
 use gloo_net::http::Request;
 use gloo_worker::{HandlerId, Worker, WorkerScope};
 use gloo_worker::{Spawnable, WorkerBridge};
+use rrr_types::SongID;
 use serde::Deserialize;
 use std::cell::RefCell;
 use wasm_bindgen::prelude::*;
@@ -61,7 +62,7 @@ pub struct Fetcher {
 }
 
 impl Fetcher {
-    pub fn new(_chart_id: usize) -> Self {
+    pub fn new(_song_id: SongID) -> Self {
         let (tx, rx) = oneshot::channel();
         let tx = RefCell::new(Some(tx));
         let bridge = FetchWorker::spawner()

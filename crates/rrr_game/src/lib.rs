@@ -5,13 +5,13 @@ pub use builder::RustRustRevolutionBuilder;
 use rrr_core::prelude::CoreSettings;
 use rrr_render::Renderer;
 use rrr_settings::Settings;
+use rrr_types::SongID;
 use std::collections::VecDeque;
 
 pub mod prelude {
     pub use rrr_render;
+    pub use rrr_types::SongID;
 }
-
-pub struct SongID(pub u16);
 
 pub struct RustRustRevolution<S: Mode> {
     _inner: S,

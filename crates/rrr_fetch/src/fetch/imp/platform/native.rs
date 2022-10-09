@@ -2,6 +2,7 @@
 
 use crate::fetch::BytesFetch;
 use anyhow::{anyhow, Result};
+use rrr_types::SongID;
 use serde::Deserialize;
 use std::{
     sync::mpsc::{Receiver, Sender},
@@ -14,7 +15,7 @@ pub struct Fetcher {
 }
 
 impl Fetcher {
-    pub fn new(_chart_id: usize) -> Self {
+    pub fn new(_chart_id: SongID) -> Self {
         let (tx, rx): (Sender<BytesFetch>, Receiver<BytesFetch>) = std::sync::mpsc::channel();
         let handle = thread::spawn(move || {
             let temp_hash = if let Some(hash) = option_env!("TEST_PREVIEW_HASH") {
