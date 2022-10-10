@@ -2283,6 +2283,7 @@ dependencies = [
  "gloo-worker",
  "log",
  "reqwest",
+ "rrr_playlist",
  "rrr_types",
  "serde",
  "wasm-bindgen",
@@ -2327,6 +2328,13 @@ dependencies = [
  "rrr_chart",
  "rrr_render",
  "strum",
+]
+
+[[package]]
+name = "rrr_playlist"
+version = "0.1.0"
+dependencies = [
+ "serde",
 ]
 
 [[package]]

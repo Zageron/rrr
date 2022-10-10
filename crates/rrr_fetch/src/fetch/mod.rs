@@ -1,11 +1,10 @@
 mod imp;
 
-use self::playlist::{Song, Stat};
+pub use imp::platform::*;
+use rrr_playlist::{Song, Stat};
 use rrr_types::SongID;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
-pub mod playlist;
-pub use imp::platform::*;
 
 // type BytesFetch = Result<std::option::Option<bytes::Bytes>>;
 #[derive(Serialize, Deserialize)]

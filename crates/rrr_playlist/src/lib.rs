@@ -1,3 +1,12 @@
+// How is construction and ownership going to happen here.
+// Do I want to rely on rrr_fetch? Probably not.
+
+// Load playlist.
+//  Cache Layer
+//  Fetch Layer
+//  Parse Layer (optional)
+// Construct playlist struct.
+
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
