@@ -155,7 +155,7 @@ jobs:
 
       - uses: actions/upload-artifact@v3
         with:
-          name: executable
+          name: ${{ matrix.os }}-${{ matrix.target }}-executable
           path: target/release/rrr.exe
 
   deploy-pages:

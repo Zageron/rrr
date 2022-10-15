@@ -2,6 +2,8 @@
 
 Second revision of the repository.
 
+[![ci](https://github.com/Zageron/rrr/actions/workflows/ci.yml/badge.svg)](https://github.com/Zageron/rrr/actions/workflows/ci.yml)
+
 ---
 
 ## Development
