@@ -18,6 +18,10 @@ rust-version = "1.66.0"
 name = "rrr"
 path = "src/main.rs"
 
+[[example]]
+name = "native"
+test = true
+
 [features]
 default = ["tui", "window"]
 tui = ["rrr_tui"]
