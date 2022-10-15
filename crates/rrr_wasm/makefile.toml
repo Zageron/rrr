@@ -35,7 +35,7 @@ args = [
     "web",
     "${CARGO_MAKE_CRATE_TARGET_DIRECTORY}/wasm32-unknown-unknown/release/${CARGO_MAKE_CRATE_NAME}.wasm",
 ]
-dependencies = ["wasm_clean", "crate"]
+dependencies = ["crate"]
 
 [tasks.serve]
 command = "miniserve"

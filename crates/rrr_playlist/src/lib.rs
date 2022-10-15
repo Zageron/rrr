@@ -8,6 +8,7 @@
 // Construct playlist struct.
 
 use serde::{Deserialize, Serialize};
+use std::collections::HashMap;
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Song {
@@ -76,3 +77,12 @@ pub enum Density {
     Integer(i64),
     String(String),
 }
+
+#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+pub struct FFRPlaylist {
+    pub songs: Vec<Song>,
+    pub stats: HashMap<String, Stat>,
+}
+
+pub trait Playlist {}
+impl Playlist for FFRPlaylist {}

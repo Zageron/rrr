@@ -1,17 +1,14 @@
 mod imp;
 
-pub use imp::platform::*;
 use rrr_playlist::{Song, Stat};
-use rrr_types::SongID;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
-// type BytesFetch = Result<std::option::Option<bytes::Bytes>>;
-#[derive(Serialize, Deserialize)]
-pub enum BytesFetch {
-    Ok(Vec<u8>),
-    Wait,
-    Err(String),
+#[derive(Debug, Serialize, Deserialize)]
+pub enum FetchProgress {
+    Fetching(f32),
+    Finished,
+    Error(String),
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone, Eq, PartialEq)]
@@ -48,6 +45,12 @@ pub struct Chart {
     pub time: String,
 }
 
-pub fn download_chart(song_id: SongID) -> Fetcher {
-    Fetcher::new(song_id)
+#[cfg(target_arch = "wasm32")]
+pub mod platform {
+    pub use super::imp::platform::*;
+}
+
+#[cfg(not(target_arch = "wasm32"))]
+pub mod platform {
+    pub use super::imp::platform::*;
 }

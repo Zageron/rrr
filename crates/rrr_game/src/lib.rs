@@ -13,17 +13,20 @@ pub mod prelude {
     pub use rrr_types::SongID;
 }
 
+#[derive(Debug)]
 pub struct RustRustRevolution<S: Mode> {
     _inner: S,
     actions: VecDeque<hit_action::Action>,
     _active_song_id: SongID,
 }
 
+#[derive(Debug)]
 pub struct Rendered {
     _renderer: Renderer,
     _settings: Settings,
 }
 
+#[derive(Debug)]
 pub struct Headless {
     _settings: CoreSettings,
 }

@@ -1,72 +1,56 @@
 #![allow(dead_code)]
 
-use crate::fetch::BytesFetch;
-use anyhow::{anyhow, Result};
-use rrr_types::SongID;
-use serde::Deserialize;
-use std::{
-    sync::mpsc::{Receiver, Sender},
-    thread,
-};
+use crate::FetchProgress;
+use anyhow::Result;
+use std::fmt::Debug;
+use std::io::Read;
 
 pub struct Fetcher {
-    rx: Receiver<BytesFetch>,
-    handle: thread::JoinHandle<()>,
+    url: String,
+    reader: Box<dyn Read + Send + Sync + 'static>,
+    bytes: Vec<u8>,
+}
+
+impl Debug for Fetcher {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.debug_struct("Fetcher")
+            .field("url", &self.url)
+            .field("bytes", &self.bytes.capacity())
+            .finish()
+    }
 }
 
 impl Fetcher {
-    pub fn new(_chart_id: SongID) -> Self {
-        let (tx, rx): (Sender<BytesFetch>, Receiver<BytesFetch>) = std::sync::mpsc::channel();
-        let handle = thread::spawn(move || {
-            let temp_hash = if let Some(hash) = option_env!("TEST_PREVIEW_HASH") {
-                hash.to_string()
-            } else {
-                "".to_string()
-            };
-            let url = format!(
-                "https://www.flashflashrevolution.com/game/r3/r3-songLoad.php?id={}&mode=2&type=ChartFFR_music",
-                temp_hash
-            );
-            log::info!("{}", url);
-            let dat = fetch_data(url);
-            tx.send(dat).unwrap();
-        });
-
-        Self { rx, handle }
-    }
-
-    pub fn fetch(&self) -> Option<BytesFetch> {
-        if let Ok(fetched_data) = self.rx.try_recv() {
-            Some(fetched_data)
+    pub fn new(url: String) -> Result<Self> {
+        let response = ureq::get(&url).call()?;
+        let len = if let Some(len) = response.header("Content-Length") {
+            len.parse()?
         } else {
-            None
+            return Err(anyhow::anyhow!("No content length."));
+        };
+
+        Ok(Self {
+            url,
+            reader: response.into_reader(),
+            bytes: Vec::with_capacity(len),
+        })
+    }
+
+    pub fn fetch(&mut self) -> Result<FetchProgress> {
+        let reader = self.reader.as_mut();
+        reader.take(1000).read_to_end(&mut self.bytes)?;
+
+        if self.bytes.len() >= self.bytes.capacity() {
+            Ok(FetchProgress::Finished)
+        } else {
+            Ok(FetchProgress::Fetching(
+                (self.bytes.len() as f32 / self.bytes.capacity() as f32) * 100.,
+            ))
         }
     }
-}
 
-pub(crate) fn fetch<T: for<'de> Deserialize<'de>>(url: String) -> Result<Option<T>> {
-    let response = reqwest::blocking::get(url)?;
-
-    match response.status() {
-        reqwest::StatusCode::OK => match response.json::<T>() {
-            Ok(parsed) => Ok(Some(parsed)),
-            Err(err) => Err(anyhow!(err)),
-        },
-        other => Err(anyhow!("Invalid status code: {}", other.as_str())),
-    }
-}
-
-pub(crate) fn fetch_data(url: String) -> BytesFetch {
-    if let Ok(response) = reqwest::blocking::get(url) {
-        match response.status() {
-            reqwest::StatusCode::OK => match response.bytes() {
-                Ok(parsed) => BytesFetch::Ok(parsed.to_vec()),
-                Err(err) => BytesFetch::Err(format!("{:?}", err.status())),
-            },
-            other => BytesFetch::Err(format!("Invalid status code: {}", other.as_str())),
-        }
-    } else {
-        BytesFetch::Err("Could not make request.".to_string())
+    pub fn consume(self) -> Vec<u8> {
+        self.bytes
     }
 }
 
@@ -77,32 +61,53 @@ mod tests {
 
     #[test]
     fn test_fetch() {
-        let test_result = fetch::<PlaylistPayload>(
-            "https://www.flashflashrevolution.com/game/r3/r3-playlist.v2.php".to_string(),
+        let url = format!(
+            "https://www.flashflashrevolution.com/game/r3/r3-songLoad.php?id={}&mode=2&type=ChartFFR_music",
+            "893d743a36543581e0dbbc5b637c7e8f"
         );
-        assert!(test_result.is_ok());
 
-        if let Ok(Some(payload)) = test_result {
-            assert!(!payload.songs.is_empty());
-            if let Some(song) = payload.songs.get(0) {
-                assert!(!song.name.is_empty());
+        let mut fetcher = Fetcher::new(url);
 
-                let song_result = fetch_data(
-                    format!("https://www.flashflashrevolution.com/game/r3/r3-songLoad.php?id={}&mode=2&type=ChartFFR_music", song.previewhash),
-                );
+        assert!(fetcher.is_ok(), "{:?}", fetcher.err());
 
-                match song_result {
-                    BytesFetch::Ok(bytes) => {
-                        assert!(!bytes.is_empty());
-                    }
-                    BytesFetch::Err(err) => {
-                        panic!("{}", err);
-                    }
-                    BytesFetch::Wait => {
-                        panic!("what");
+        if let Ok(fetcher) = fetcher.as_mut() {
+            loop {
+                let progress = fetcher.fetch();
+                if let Ok(progress) = progress {
+                    match progress {
+                        FetchProgress::Fetching(percent) => println!("%{:?} complete", percent),
+                        FetchProgress::Finished => break,
+                        FetchProgress::Error(_) => todo!(),
                     }
                 }
             }
+        }
+    }
+
+    #[test]
+    fn test_fetch_stream() {
+        let mut fetcher = Fetcher::new(
+            "https://www.flashflashrevolution.com/game/r3/r3-playlist.v2.php".to_string(),
+        );
+
+        assert!(fetcher.is_ok(), "{:?}", fetcher.err());
+
+        if let Ok(fetcher) = fetcher.as_mut() {
+            loop {
+                let progress = fetcher.fetch();
+                if let Ok(progress) = progress {
+                    match progress {
+                        FetchProgress::Fetching(percent) => println!("%{:?} complete", percent),
+                        FetchProgress::Finished => break,
+                        FetchProgress::Error(_) => todo!(),
+                    }
+                }
+            }
+        }
+
+        if let Ok(fetcher) = fetcher {
+            let data = fetcher.consume();
+            let _playlist: PlaylistPayload = serde_json::from_slice(&data).unwrap();
         }
     }
 }

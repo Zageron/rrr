@@ -10,10 +10,6 @@ edition = "2021"
 publish = false
 rust-version = "1.66.0"
 
-[[bin]]
-name = "fetch"
-path = "workers/fetch.rs"
-
 [lib]
 crate-type = ["cdylib"]
 
@@ -25,11 +21,12 @@ default = ["develop"]
 [dependencies]
 console_error_panic_hook = "0.1.7"
 console_log = "0.2.0"
-gloo-worker = "0.2.1"
 log = "0.4.17"
 pixels = { git = "https://github.com/parasyte/pixels.git", branch = "main" }
 rrr_fetch = { path = "../rrr_fetch" }
+rrr_game = { path = "../rrr_game" }
 rrr_render = { path = "../rrr_render" }
+rrr_input = { path = "../rrr_input" }
 wasm-bindgen = "0.2.83"
 wasm-bindgen-futures = "0.4.33"
 wgpu = { version = "0.13.1", features = ["webgl"] }
@@ -38,7 +35,7 @@ winit_input_helper = "0.13.0"
 
 [dependencies.web-sys]
 version = "0.3.60"
-features = ["HtmlCanvasElement"]
+features = ["HtmlCanvasElement", "Response", "ReadableStream"]
 
 [dev-dependencies]
 wasm-bindgen-test = "0.3.33"

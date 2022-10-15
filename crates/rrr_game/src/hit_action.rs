@@ -1,5 +1,6 @@
 use rrr_input::KeyCode;
 
+#[derive(Debug)]
 pub struct Action {
     _key: KeyCode,
     _ts: u32,
