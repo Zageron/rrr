@@ -44,7 +44,8 @@ jobs:
         if: ${{ runner.os == 'Linux' }}
 
       - name: Build
-        run: cargo make --disable-check-for-updates check --makefile makefile.toml
+        working-directory: ${{ github.workspace }}
+        run: cargo make check --makefile makefile.toml
 
   wasm:
     name: Build Wasm
@@ -88,7 +89,8 @@ jobs:
         if: ${{ runner.os == 'Linux' }}
 
       - name: Build
-        run: cargo make --disable-check-for-updates wasm --makefile makefile.toml
+        working-directory: ${{ github.workspace }}
+        run: cargo make wasm --makefile makefile.toml
 
       - name: Upload Artifact
         if: ${{ !env.ACT }}
@@ -142,7 +144,8 @@ jobs:
         if: ${{ !env.ACT }}
 
       - name: Build
-        run: cargo make --disable-check-for-updates release --makefile makefile.toml
+        working-directory: ${{ github.workspace }}
+        run: cargo make release --makefile makefile.toml
 
   deploy-pages:
     needs: [wasm]
