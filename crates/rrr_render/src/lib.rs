@@ -1,6 +1,8 @@
 use anyhow::Result;
 use pixels::{
-    raw_window_handle::HasRawWindowHandle, wgpu::Color, Pixels, PixelsBuilder, SurfaceTexture,
+    raw_window_handle::{HasRawDisplayHandle, HasRawWindowHandle},
+    wgpu::Color,
+    Pixels, PixelsBuilder, SurfaceTexture,
 };
 
 pub mod sprites;
@@ -11,14 +13,14 @@ pub struct Renderer {
 }
 
 #[derive(Debug)]
-pub struct RendererBuilder<'win, W: HasRawWindowHandle> {
+pub struct RendererBuilder<'win, W: HasRawWindowHandle + HasRawDisplayHandle> {
     color: Color,
     width: u32,
     height: u32,
     window: &'win W,
 }
 
-impl<'win, W: HasRawWindowHandle> RendererBuilder<'win, W> {
+impl<'win, W: HasRawWindowHandle + HasRawDisplayHandle> RendererBuilder<'win, W> {
     pub fn new(width: u32, height: u32, window: &'win W) -> Self {
         let default_clear_color = pixels::wgpu::Color {
             r: 0.,

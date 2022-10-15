@@ -16,4 +16,4 @@ crate-type = ["lib"]
 [dependencies]
 anyhow = "1.0.65"
 image = { version = "0.24.4", default-features = false, features = ["png"] }
-pixels = { git = "https://github.com/parasyte/pixels.git", branch = "main" }
+pixels = { git = "https://github.com/Zageron/pixels.git", branch = "main" }
