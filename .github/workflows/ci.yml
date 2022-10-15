@@ -89,8 +89,8 @@ jobs:
         if: ${{ runner.os == 'Linux' }}
 
       - name: Build
-        working-directory: ${{ github.workspace }}
-        run: cargo make wasm --makefile makefile.toml
+        working-directory: ${{ github.workspace }}/crates/rrr_wasm
+        run: cargo make build --makefile makefile.toml
 
       - name: Upload Artifact
         if: ${{ !env.ACT }}
@@ -145,7 +145,7 @@ jobs:
 
       - name: Build
         working-directory: ${{ github.workspace }}
-        run: cargo make release --makefile makefile.toml
+        run: cargo make release --makefile makefile.toml --no-workspace
 
   deploy-pages:
     needs: [wasm]
