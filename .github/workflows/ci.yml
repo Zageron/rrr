@@ -1,0 +1,161 @@
+name: ci
+
+on:
+  push:
+    branches: [main, workflow]
+    paths-ignore:
+      - "*.md"
+      - "*.markdown"
+      - ".vscode/**"
+      - "LICENCE"
+      - ".github/workflows/code-coverage.yml"
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  check:
+    name: Rust project
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          components: rustfmt, clippy
+          override: true
+          profile: minimal
+          target: wasm32-unknown-unknown
+          toolchain: nightly-2022-10-15
+
+      - uses: davidB/rust-cargo-make@v1
+        with:
+          version: "0.36.1"
+
+      - name: Update Linux Dependencies
+        run: sudo apt-get update
+        if: ${{ runner.os == 'Linux' }}
+
+      - name: Install Linux Dependencies
+        run: sudo apt-get update && sudo apt-get update && sudo apt-get install -y libegl1-mesa-dev xorg-dev libasound2-dev
+        if: ${{ runner.os == 'Linux' }}
+
+      - name: Build
+        run: cargo make --disable-check-for-updates check
+
+  wasm:
+    name: Build Wasm
+
+    runs-on: ubuntu-22.04
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          override: true
+          profile: minimal
+          target: wasm32-unknown-unknown
+          toolchain: nightly-2022-10-15
+
+      - name: Setup Pages
+        if: ${{ !env.ACT }}
+        id: pages
+        uses: actions/configure-pages@v2
+
+      - uses: davidB/rust-cargo-make@v1
+        with:
+          version: "0.36.1"
+
+      - uses: jetli/wasm-bindgen-action@v0.1.0
+        with:
+          version: "0.2.83"
+
+      - name: ⚡ Cache
+        uses: Swatinem/rust-cache@v2.0.0
+        if: ${{ !env.ACT }}
+
+      - name: Update Linux Dependencies
+        run: sudo apt-get update
+        if: ${{ runner.os == 'Linux' }}
+
+      - name: Install Linux Dependencies
+        run: sudo apt-get install -y libegl1-mesa-dev xorg-dev libasound2-dev
+        if: ${{ runner.os == 'Linux' }}
+
+      - name: Build
+        run: cargo make --disable-check-for-updates wasm
+
+      - name: Upload Artifact
+        if: ${{ !env.ACT }}
+        uses: actions/upload-pages-artifact@v1
+        with:
+          path: ./crates/rrr_wasm/web
+
+  native:
+    name: Build Native
+
+    strategy:
+      matrix:
+        os: [ubuntu-22.04, windows-2022, macos-12]
+        include:
+          - os: ubuntu-22.04
+            target: [x86_64-unknown-linux-musl, x86_64-unknown-linux-gnu]
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          override: true
+          profile: minimal
+          target: ${{ matrix.target }}
+          toolchain: nightly-2022-10-15
+
+      - uses: davidB/rust-cargo-make@v1
+        with:
+          version: "0.36.1"
+
+      - name: Update Linux Dependencies
+        run: sudo apt-get update
+        if: ${{ runner.os == 'Linux' }}
+
+      - name: Install MUSL
+        run: sudo apt-get install -y musl-tools
+        if: ${{ matrix.target == 'x86_64-unknown-linux-musl' }}
+
+      - name: Install Linux Dependencies
+        run: sudo apt-get update && sudo apt-get install -y libegl1-mesa-dev xorg-dev libasound2-dev
+        if: ${{ runner.os == 'Linux' }}
+
+      - name: ⚡ Cache
+        uses: Swatinem/rust-cache@v2.0.0
+        if: ${{ !env.ACT }}
+
+      - name: Build
+        run: cargo make --disable-check-for-updates release
+
+  deploy-pages:
+    needs: [wasm]
+
+    permissions:
+      pages: write
+      id-token: write
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to GitHub Pages
+        if: ${{ !env.ACT }}
+        id: deployment
+        uses: actions/deploy-pages@v1
