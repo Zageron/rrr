@@ -151,7 +151,7 @@ jobs:
 
       - name: Build
         working-directory: ${{ github.workspace }}
-        run: cargo make release --makefile makefile.toml --no-workspace
+        run: cargo build --release --bins
 
   deploy-pages:
     needs: [wasm]
