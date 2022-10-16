@@ -1,0 +1,47 @@
+name: check
+
+on:
+  workflow_call:
+
+env:
+  CARGO_TERM_VERBOSE: true
+  RUST_BACKTRACE: 1
+  RUSTFLAGS: "-Dwarnings"
+
+jobs:
+  check:
+    name: Check
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          components: rustfmt, clippy
+          override: true
+          profile: minimal
+          target: wasm32-unknown-unknown
+          toolchain: nightly-2022-10-15
+
+      - uses: davidB/rust-cargo-make@v1
+        with:
+          version: "0.36.1"
+
+      - name: Update Linux Dependencies
+        run: sudo apt-get update
+        if: ${{ runner.os == 'Linux' }}
+
+      - name: Install Linux Dependencies
+        run: sudo apt-get update && sudo apt-get update && sudo apt-get install -y libegl1-mesa-dev xorg-dev libasound2-dev
+        if: ${{ runner.os == 'Linux' }}
+
+      - name: ⚡ Cache
+        uses: Swatinem/rust-cache@v2.0.0
+        if: ${{ !env.ACT }}
+
+      - name: Check
+        working-directory: ${{ github.workspace }}
+        run: cargo make check --makefile makefile.toml

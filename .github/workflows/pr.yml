@@ -1,0 +1,9 @@
+name: pr
+
+on:
+  pull_request:
+    types: [opened, edited]
+
+jobs:
+  check:
+    uses: ./.github/workflows/check.yml
