@@ -1,0 +1,10 @@
+name: pr
+
+on:
+  pull_request_target:
+    branches:
+      - main
+
+jobs:
+  check:
+    uses: ./.github/workflows/check.yml
