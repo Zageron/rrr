@@ -3,6 +3,11 @@ name: check
 on:
   workflow_call:
 
+env:
+  CARGO_TERM_VERBOSE: true
+  RUST_BACKTRACE: 1
+  RUSTFLAGS: "-Dwarnings"
+
 jobs:
   check:
     name: Check
