@@ -2,8 +2,8 @@ use rrr_input::KeyCode;
 
 #[derive(Debug)]
 pub struct Action {
-    _key: KeyCode,
-    _ts: u32,
+    pub key: KeyCode,
+    pub ts: u32,
 }
 
 pub struct NeedsKeyCode();
@@ -29,10 +29,10 @@ impl Builder<NeedsKeyCode> {
 
 impl Builder<NeedsTimestamp> {
     #[must_use]
-    pub fn with_timestamp(self, ts: u32) -> Action {
+    pub fn build(self, ts: u32) -> Action {
         Action {
-            _key: self.inner.0,
-            _ts: ts,
+            key: self.inner.0,
+            ts,
         }
     }
 }

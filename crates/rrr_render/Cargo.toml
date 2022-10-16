@@ -15,5 +15,10 @@ crate-type = ["lib"]
 
 [dependencies]
 anyhow = "1.0.66"
-image = { version = "0.24.4", default-features = false, features = ["png"] }
 pixels = { git = "https://github.com/Zageron/pixels.git", branch = "main" }
+rrr_chart = { path = "../rrr_chart" }
+rrr_core = { path = "../rrr_core" }
+rrr_graphics = { path = "../rrr_graphics" }
+rrr_math = { path = "../rrr_math" }
+rrr_noteskin = { path = "../rrr_noteskin" }
+rrr_types = { path = "../rrr_types" }

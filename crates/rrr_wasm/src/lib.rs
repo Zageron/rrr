@@ -1,13 +1,18 @@
 #![forbid(unsafe_code)]
 #![allow(unused)]
 
+use anyhow::{self, Result};
 pub use rrr_fetch::platform::Fetcher;
-use rrr_fetch::FetchProgress;
+use rrr_fetch::{Chart, FetchProgress};
 use rrr_game::{
-    hit_action, prelude::SongID, Rendered, RustRustRevolution, RustRustRevolutionBuilder,
+    hit_action,
+    prelude::{Play, RuntimeChart, SongID, Turntable},
+    Rendered, RustRustRevolution, RustRustRevolutionBuilder,
 };
 use rrr_input::KeyCode;
+use rrr_record::{record::Record, RecordPressBuilder};
 use rrr_render::{Renderer, RendererBuilder};
+use rrr_time::Time;
 use std::rc::Rc;
 use wasm_bindgen::{
     prelude::{wasm_bindgen, *},
@@ -15,7 +20,7 @@ use wasm_bindgen::{
 };
 use web_sys::HtmlCanvasElement;
 use winit::{
-    dpi::LogicalSize,
+    dpi::{LogicalSize, PhysicalSize},
     event::{TouchPhase, VirtualKeyCode},
     event_loop::EventLoop,
     window::{self, Window, WindowBuilder},
@@ -25,7 +30,7 @@ use winit::{
 #[derive(Debug)]
 pub struct RRR {
     #[wasm_bindgen(skip)]
-    pub rrr: RustRustRevolution<Rendered>,
+    pub rrr: RustRustRevolution<Rendered, Time>,
 
     #[wasm_bindgen(skip)]
     pub window: Window,
@@ -57,12 +62,20 @@ impl RRR {
                     winit::event::Event::Resumed => {}
 
                     winit::event::Event::MainEventsCleared => {
+                        self.rrr.update();
+                        self.rrr.draw();
+                        self.window.set_inner_size(PhysicalSize {
+                            width: self.rrr.width(),
+                            height: self.rrr.height(),
+                        }); // Is this needed?
                         self.window.request_redraw();
                     }
 
                     winit::event::Event::RedrawRequested(_) => {}
 
-                    winit::event::Event::RedrawEventsCleared => {}
+                    winit::event::Event::RedrawEventsCleared => {
+                        self.rrr.finish();
+                    }
 
                     winit::event::Event::LoopDestroyed => {}
 
@@ -193,7 +206,25 @@ impl RRRBuilder {
             return Err("Bad canvas.".to_owned().into());
         };
 
-        let mut rrr = RustRustRevolutionBuilder::with_renderer(renderer).build(SongID(1));
+        let url = format!(
+            "https://www.flashflashrevolution.com/game/r3/r3-songLoad.php?id={}&mode=2&type=ChartFFR_music",
+            "f9b50c8a00667e711ff63ed2cd944f54"
+        );
+
+        let mut fetcher = Fetcher::new(url).await;
+
+        assert!(fetcher.is_ok(), "{:?}", fetcher.err());
+
+        let data = fetcher?.fetch().await;
+
+        let record_press = RecordPressBuilder::from_swf(data);
+        let record = record_press.press();
+
+        let turntable = Turntable::load(record.unwrap());
+        let play = Play::new(turntable);
+
+        let mut rrr =
+            RustRustRevolutionBuilder::with_renderer(renderer).build(play.start_with_audio());
 
         Ok(RRR {
             rrr,

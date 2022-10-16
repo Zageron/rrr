@@ -1,4 +1,6 @@
-#[derive(Copy, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+use serde::{Deserialize, Serialize};
+
+#[derive(Copy, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize, Deserialize)]
 #[repr(u32)]
 pub enum KeyCode {
     Num1,

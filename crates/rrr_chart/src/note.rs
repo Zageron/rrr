@@ -1,11 +1,23 @@
+use rrr_types::Direction;
+use serde::{Deserialize, Serialize};
 use std::fmt::{Display, Formatter};
 use strum::{EnumCount, EnumIter};
 
-#[cfg(feature = "serde")]
-use serde::{Deserialize, Serialize};
-
-#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(Clone, Copy, Eq, EnumCount, EnumIter, PartialEq, Ord, PartialOrd, Hash, Debug)]
+#[cfg_attr(feature = "serde", derive())]
+#[derive(
+    Clone,
+    Copy,
+    Eq,
+    EnumCount,
+    EnumIter,
+    PartialEq,
+    Ord,
+    PartialOrd,
+    Hash,
+    Debug,
+    Serialize,
+    Deserialize,
+)]
 pub enum Color {
     Red,
     Yellow,
@@ -17,26 +29,6 @@ pub enum Color {
     Cyan,
     White,
     Receptor,
-}
-
-#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(Clone, Eq, PartialEq, Ord, PartialOrd, Hash, Debug)]
-#[repr(u32)]
-pub enum Direction {
-    Left = 0,
-    Down = 1,
-    Up = 2,
-    Right = 3,
-}
-
-impl From<Direction> for u32 {
-    fn from(dir: Direction) -> Self {
-        if let Ok(res) = dir.try_into() {
-            res
-        } else {
-            u32::MAX
-        }
-    }
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]

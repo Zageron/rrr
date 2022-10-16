@@ -10,10 +10,18 @@ edition = "2021"
 publish = false
 rust-version = "1.66.0"
 
+[features]
+default = ["swf"]
+bin = []
+swf = ["dep:swf"]
+sm = []
+
+
 [dependencies]
 anyhow = "1.0.66"
 log = "0.4.17"
+rrr_types = { path = "../rrr_types" }
 serde = { version = "1.0.147", features = ["derive"] }
 strum = { version = "0.24.1", features = ["derive"] }
-swf = "0.2.0"
+swf = { version = "0.2.0", optional = true }
 thiserror = "1.0.37"

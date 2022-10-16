@@ -4,7 +4,7 @@ use crate::TimeTrait;
 use std::ops::Sub;
 use web_sys::window;
 
-#[derive(Copy, Clone)]
+#[derive(Debug, Copy, Clone)]
 pub struct Time(f64);
 
 impl TimeTrait for Time {

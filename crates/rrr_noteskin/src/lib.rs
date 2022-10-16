@@ -1,12 +1,19 @@
 #![allow(dead_code)]
 
-use image::{DynamicImage, GenericImageView, SubImage};
 use rrr_chart::NoteColor;
-use rrr_render::sprites::Drawable;
+use rrr_graphics::{
+    prelude::image::{self, DynamicImage, GenericImageView, SubImage},
+    sprites::Drawable,
+};
+
+pub mod prelude {
+    pub use rrr_chart::NoteColor;
+}
 
 static DEFAULT_NOTESKIN: &[u8] = include_bytes!("../assets/default_noteskin.png");
 
-pub(crate) struct Definition {
+#[derive(Debug)]
+pub struct Noteskin {
     pub note_width: usize,
     pub note_height: usize,
     pub color_indices: Vec<NoteColor>,
@@ -15,7 +22,7 @@ pub(crate) struct Definition {
     pub rows: usize,
 }
 
-impl Default for Definition {
+impl Default for Noteskin {
     fn default() -> Self {
         let noteskin_bytes = DEFAULT_NOTESKIN;
         let noteskin_image = image::load_from_memory(noteskin_bytes).ok().unwrap();
@@ -43,11 +50,11 @@ impl Default for Definition {
     }
 }
 
-pub(crate) struct Note<'a> {
-    pub(crate) width: usize,
-    pub(crate) height: usize,
-    pub(crate) color: NoteColor,
-    pub(crate) image: SubImage<&'a DynamicImage>,
+pub struct Note<'a> {
+    pub width: usize,
+    pub height: usize,
+    pub color: NoteColor,
+    pub image: SubImage<&'a DynamicImage>,
 }
 
 impl<'a> Drawable<'a> for Note<'a> {
@@ -64,8 +71,8 @@ impl<'a> Drawable<'a> for Note<'a> {
     }
 }
 
-impl Definition {
-    pub(crate) fn new(
+impl Noteskin {
+    pub fn new(
         note_width: usize,
         note_height: usize,
         color_indices: Vec<NoteColor>,
@@ -87,7 +94,7 @@ impl Definition {
         &self.rotations
     }
 
-    pub(crate) fn get_note(&self, color: NoteColor) -> Note<'_> {
+    pub fn get_note(&self, color: NoteColor) -> Note<'_> {
         let width = self.note_width;
         let height = self.note_height;
         let color_index = self.color_indices.iter().position(|c| *c == color).unwrap();
@@ -127,7 +134,7 @@ mod tests {
             }
         };
 
-        let definition = Definition::new(
+        let definition = Noteskin::new(
             64,
             64,
             [

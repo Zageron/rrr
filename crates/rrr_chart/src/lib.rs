@@ -3,7 +3,5 @@ mod note;
 mod parser;
 
 pub use chart_impl::{Beat, RuntimeChart};
-pub use note::{
-    Color as NoteColor, ColorIter, Direction as NoteDirection, Note, NoteRow, RuntimeNote,
-};
-pub use parser::swf::SwfParser;
+pub use note::{Color as NoteColor, ColorIter, Note, NoteRow, RuntimeNote};
+pub use parser::swf;

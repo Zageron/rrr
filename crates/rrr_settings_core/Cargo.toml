@@ -11,4 +11,6 @@ publish = false
 rust-version = "1.66.0"
 
 [dependencies]
+rrr_input = { path = "../rrr_input" }
+rrr_types = { path = "../rrr_types" }
 serde = { version = "1.0.147", features = ["derive"] }

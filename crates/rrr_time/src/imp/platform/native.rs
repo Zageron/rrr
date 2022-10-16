@@ -1,7 +1,7 @@
 use crate::TimeTrait;
 use std::time::Instant;
 
-#[derive(Copy, Clone)]
+#[derive(Debug, Copy, Clone)]
 pub struct Time(Instant);
 
 impl TimeTrait for Time {
