@@ -27,7 +27,7 @@ futures-util = "0.3.24"
 js-sys = "0.3.60"
 wasm-bindgen = "0.2.83"
 wasm-bindgen-futures = "0.4.33"
-wasm-streams = "0.2.3"
+wasm-streams = "0.3.0"
 
 [target.'cfg(target_arch = "wasm32")'.dependencies.web-sys]
 version = "0.3.60"
