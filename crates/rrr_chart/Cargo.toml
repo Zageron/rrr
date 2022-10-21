@@ -11,7 +11,7 @@ publish = false
 rust-version = "1.66.0"
 
 [dependencies]
-anyhow = "1.0.65"
+anyhow = "1.0.66"
 log = "0.4.17"
 serde = { version = "1.0.145", features = ["derive"] }
 strum = { version = "0.24.1", features = ["derive"] }
