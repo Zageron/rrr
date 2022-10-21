@@ -11,7 +11,7 @@ publish = false
 rust-version = "1.66.0"
 
 [dependencies]
-anyhow = "1.0.65"
+anyhow = "1.0.66"
 btreemultimap = "0.1.0"
 log = "0.4.17"
 rrr_audio = { path = "../rrr_audio" }
