@@ -12,4 +12,4 @@ rust-version = "1.66.0"
 
 [dependencies]
 rrr_settings_core = { path = "../rrr_settings_core" }
-serde = { version = "1.0.145", features = ["derive"] }
+serde = { version = "1.0.147", features = ["derive"] }
