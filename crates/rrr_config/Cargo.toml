@@ -11,4 +11,4 @@ publish = false
 rust-version = "1.66.0"
 
 [dependencies]
-serde = { version = "1.0.145", features = ["derive"] }
+serde = { version = "1.0.147", features = ["derive"] }
