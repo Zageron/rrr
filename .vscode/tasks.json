@@ -20,6 +20,21 @@
 			}
 		},
 		{
+			"label": "Watch - Native",
+			"type": "shell",
+			"command": "cargo",
+			"args": [
+				"make",
+				"watch"
+			],
+			"problemMatcher": [
+				"$rustc"
+			],
+			"runOptions": {
+				"runOn": "folderOpen"
+			}
+		},
+		{
 			"label": "Build",
 			"type": "shell",
 			"command": "cargo",

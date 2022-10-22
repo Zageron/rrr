@@ -26,3 +26,22 @@ args = ["build", "--bins"]
 workspace = false
 command = "cargo"
 args = ["install", "--path", "."]
+
+[tasks.watch]
+workspace = false
+command = "cargo"
+args = [
+    "watch",
+    "-w",
+    ".",
+    "-i",
+    "**/*.markdown",
+    "-i",
+    "target/*",
+    "-i",
+    ".*",
+    "-i",
+    "rrr_wasm/*",
+    "-s",
+    "cargo make build",
+]
