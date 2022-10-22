@@ -42,6 +42,9 @@ jobs:
         uses: Swatinem/rust-cache@v2.0.1
         if: ${{ !env.ACT }}
 
+      - name: Check semver violations
+        uses: obi1kenobi/cargo-semver-checks-action@v1
+  
       - name: Check
         working-directory: ${{ github.workspace }}
         run: cargo make check --makefile makefile.toml
