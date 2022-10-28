@@ -15,6 +15,7 @@ anyhow = "1.0.66"
 crossterm = "0.25.0"
 futures = "0.3.25"
 rrr_config = { path = "../rrr_config" }
+rrr_fetch = { path = "../rrr_fetch" }
 rrr_game = { path = "../rrr_game" }
 rrr_record = { path = "../rrr_record" }
 rrr_render = { path = "../rrr_render" }

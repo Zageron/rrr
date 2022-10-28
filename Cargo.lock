@@ -2160,6 +2160,7 @@ dependencies = [
  "crossterm",
  "futures",
  "rrr_config",
+ "rrr_fetch",
  "rrr_game",
  "rrr_record",
  "rrr_render",

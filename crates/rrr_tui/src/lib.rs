@@ -5,11 +5,12 @@ use crossterm::{
     terminal::{disable_raw_mode, enable_raw_mode, EnterAlternateScreen, LeaveAlternateScreen},
 };
 use rrr_config::Config;
+use rrr_fetch::{platform::Fetcher, FetchProgress};
 use rrr_game::{
     prelude::{Play, RuntimeChart, Turntable},
     RustRustRevolutionBuilder,
 };
-use rrr_record::record::Record;
+use rrr_record::{record::Record, RecordPressBuilder};
 use rrr_window::{
     prelude::{EventLoopBuilder, EventLoopExtRunReturn},
     Window,
@@ -129,6 +130,39 @@ pub fn init() -> Result<()> {
     loop {
         if let Ok(_song_id) = rx.try_recv() {
             {
+                let url = format!(
+                    "https://www.flashflashrevolution.com/game/r3/r3-songLoad.php?id={}&mode=2&type=ChartFFR_music",
+                    "f9b50c8a00667e711ff63ed2cd944f54"
+                );
+
+                let mut fetcher = Fetcher::new(url);
+
+                assert!(fetcher.is_ok(), "{:?}", fetcher.err());
+
+                if let Ok(fetcher) = fetcher.as_mut() {
+                    loop {
+                        let progress = fetcher.fetch();
+                        if let Ok(progress) = progress {
+                            match progress {
+                                FetchProgress::Fetching(percent) => {
+                                    println!("%{:?} complete", percent)
+                                }
+                                FetchProgress::Finished => break,
+                                FetchProgress::Error(_) => todo!(),
+                            }
+                        }
+                    }
+                }
+
+                let data = if let Ok(fetcher) = fetcher {
+                    fetcher.consume()
+                } else {
+                    return Err(anyhow::anyhow!("Failed to fetch."));
+                };
+
+                let record_press = RecordPressBuilder::from_swf(data);
+                let record = record_press.press();
+
                 let config = Config::default();
                 let mut window = Window::new(config, &mut event_loop)?;
                 let renderer = futures::executor::block_on(async {
@@ -137,11 +171,6 @@ pub fn init() -> Result<()> {
                         .await
                 })?;
 
-                // Load chart with song_id
-
-                let mp3 = Vec::<u8>::default();
-                let chart = RuntimeChart::default();
-                let record = Record::new(mp3, chart);
                 let turntable = Turntable::load(record.unwrap());
                 let play = Play::new(turntable);
 
