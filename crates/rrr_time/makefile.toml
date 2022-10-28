@@ -1,6 +1,6 @@
 [tasks.test_wasm]
 command = "wasm-pack"
-args = ["test", "--headless", "--chrome"]
+args = ["test", "--headless", "--firefox"]
 
 [tasks.test_native]
 command = "cargo"
