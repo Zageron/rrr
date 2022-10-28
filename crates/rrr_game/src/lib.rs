@@ -123,7 +123,6 @@ impl RustRustRevolution<Rendered, Time> {
             (time_on_screen as i32 + settings.note_offset) as u32,
         );
         if let Ok(view) = view {
-            log::info!("VIEW: {:?}", view);
             let temp_view = view.clone();
 
             // Get the view from the play state.
