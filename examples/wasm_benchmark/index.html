@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <base href="/">
+
+    <!-- Primary Meta Tags -->
+    <title>RRR</title>
+    <meta name="author" content="FFR">
+    <meta name="description" content="RRR">
+    <meta name="theme-color" content="#FF0000">
+    <link rel="copyright" href="copyright">
+    <link rel="icon" type="image/x-icon" href="favicon.ico" />
+
+    <!-- Indexing -->
+    <meta name='robots' content='noindex,follow' />
+    <link type="text/plain" rel="author" href="humans.txt">
+
+    <!-- Styling -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="css/style.css" rel="stylesheet">
+
+    <link rel="manifest" href="manifest.json">
+
+</head>
+
+<body class="root flex">
+
+    <div class="benchmark">
+        <label>avg</label>
+        <p id="avg_frame_time">0.00ms</p>
+
+        <label>min</label>
+        <p id="min_frame_time">0.00ms</p>
+
+        <label>max</label>
+        <p id="max_frame_time">0.00ms</p>
+
+        <label>skipped</label>
+        <p id="skipped_frames">0</p>
+    </div>
+
+    <div id="canvas">
+        <canvas class="game" id="rrr" width="512" height="720"></canvas>
+        <div class="progress">
+            <div class="progress-inner">
+                <p id="progress">Press Space to Start!</p>
+            </div>
+        </div>
+
+        <div class="judgement">
+            <div class="amazing">
+                <label>Amazing: </label>
+                <p id="amazing">0</p>
+            </div>
+            <div class="perfect">
+                <label>Perfect: </label>
+                <p id="perfect">0</p>
+            </div>
+            <div class="good">
+                <label>Good: </label>
+                <p id="good">0</p>
+            </div>
+            <div class="average">
+                <label>Average: </label>
+                <p id="average">0</p>
+            </div>
+            <div class="boo">
+                <label>Boo: </label>
+                <p id="boo">0</p>
+            </div>
+            <div class="miss">
+                <label>Miss: </label>
+                <p id="miss">0</p>
+            </div>
+        </div>
+    </div>
+    <script type="module">
+        import init, { play, Engine, SettingsMerge } from "./bin/rrr.js";
+        async function run() {
+            await init();
+
+            var engine = new Engine();
+            console.log("Engine: ", engine.toJSON().toJSON());
+
+            var settings = new SettingsMerge();
+            settings.scroll_speed = 1000;
+            engine.modify_settings(settings);
+
+            console.log("Post Edit Engine: ", engine.toJSON().toJSON());
+
+            // Launch the game
+            play(document.getElementById("rrr"), 512, 720);
+        }
+
+        run();
+    </script>
+</body>
+
+</html>
