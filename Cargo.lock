@@ -1976,6 +1976,10 @@ dependencies = [
 ]
 
 [[package]]
+name = "rrr_bench"
+version = "0.1.0"
+
+[[package]]
 name = "rrr_chart"
 version = "0.1.0"
 dependencies = [
