@@ -7,7 +7,7 @@ async function main() {
 
     let canvas = document.body.appendChild(document.createElement("canvas"));
     canvas.setAttribute('class', 'canvas');
-    canvas.width = 764;
+    canvas.width = 768;
     canvas.height = 512;
 
     const params = new URLSearchParams(window.location.search);
