@@ -7,10 +7,10 @@ use crossterm::{
 use rrr_config::Config;
 use rrr_fetch::{platform::Fetcher, FetchProgress};
 use rrr_game::{
-    prelude::{Play, RuntimeChart, Turntable},
+    prelude::{Play, Turntable},
     RustRustRevolutionBuilder,
 };
-use rrr_record::{record::Record, RecordPressBuilder};
+use rrr_record::RecordPressBuilder;
 use rrr_window::{
     prelude::{EventLoopBuilder, EventLoopExtRunReturn},
     Window,

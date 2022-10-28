@@ -3,11 +3,10 @@ use clap::Parser;
 use rrr_config::Config;
 use rrr_fetch::{platform::Fetcher, FetchProgress};
 use rrr_game::{
-    prelude::RuntimeChart,
     prelude::{rrr_render, Play, Turntable},
     RustRustRevolutionBuilder,
 };
-use rrr_record::{record::Record, RecordPressBuilder};
+use rrr_record::RecordPressBuilder;
 use rrr_window::{prelude::EventLoopBuilder, Window};
 
 #[derive(Debug, Parser)]
