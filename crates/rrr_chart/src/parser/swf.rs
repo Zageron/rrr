@@ -1,6 +1,5 @@
-use crate::{chart_impl::RuntimeChart, NoteColor, NoteDirection, RuntimeNote};
-use std::ops::ControlFlow;
-use swf::{
+use crate::{chart_impl::RuntimeChart, NoteColor, RuntimeNote};
+use ::swf::{
     avm1::{
         self,
         types::{ConstantPool, Value},
@@ -8,6 +7,8 @@ use swf::{
     read::Reader,
     SwfBuf, UTF_8,
 };
+use rrr_types::Direction;
+use std::ops::ControlFlow;
 use thiserror::Error;
 
 #[derive(Error, Debug)]
@@ -45,8 +46,8 @@ pub struct Parsing {
 
 #[allow(unused)]
 pub struct Parsed {
-    mp3: Vec<u8>,
-    chart: RuntimeChart,
+    pub mp3: Vec<u8>,
+    pub chart: RuntimeChart,
 }
 
 pub enum ParsingState {
@@ -105,8 +106,9 @@ impl SwfParser<Parsing> {
                 swf::Tag::DefineSound(_) => log::info!("DefineSound"),
                 swf::Tag::DoAction(action) => {
                     let res = SwfParser::parse_action(action, swf_reader.version());
-                    if let Ok(chart) = res {
-                        self.state.chart = chart;
+                    match res {
+                        Ok(chart) => self.state.chart = chart,
+                        Err(e) => println!("Error when parsing the swf: {}", e),
                     }
                 }
                 swf::Tag::SoundStreamBlock(sound) => {
@@ -258,17 +260,17 @@ fn parse_color(
 fn parse_direction(
     value_stack: &mut Vec<Value<'_>>,
     constant_pool: &Option<ConstantPool<'_>>,
-) -> anyhow::Result<NoteDirection> {
+) -> anyhow::Result<Direction> {
     if let Some(Value::ConstantPool(dir)) = value_stack.pop() {
         match constant_pool.clone().unwrap().strings[dir as usize]
             .to_str_lossy(UTF_8)
             .to_string()
             .as_str()
         {
-            "L" => Ok(NoteDirection::Left),
-            "U" => Ok(NoteDirection::Up),
-            "D" => Ok(NoteDirection::Down),
-            "R" => Ok(NoteDirection::Right),
+            "L" => Ok(Direction::Left),
+            "U" => Ok(Direction::Up),
+            "D" => Ok(Direction::Down),
+            "R" => Ok(Direction::Right),
             _ => anyhow::bail!(ChartParseError::NoteDirection),
         }
     } else {

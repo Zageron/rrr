@@ -10,12 +10,22 @@ edition = "2021"
 publish = false
 rust-version = "1.66.0"
 
+[features]
+default = ["develop"]
+develop = [
+    "log/max_level_info",
+    "log/release_max_level_info",
+    "rrr_game/release",
+]
+release = ["log/release_max_level_off", "rrr_game/release"]
+
 [dependencies]
 anyhow = "1.0.66"
 log = "0.4.17"
 rrr_config = { path = "../rrr_config" }
 rrr_game = { path = "../rrr_game" }
 rrr_input = { path = "../rrr_input" }
+rrr_time = { path = "../rrr_time" }
 serde = { version = "1.0.147", features = ["derive"] }
 
 [target.'cfg(unix)'.dependencies]

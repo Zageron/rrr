@@ -7,6 +7,22 @@
         {
             "type": "lldb",
             "request": "launch",
+            "name": "Debug example 'native'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--example=native",
+                    "--package=rrr"
+                ],
+                "filter": {
+                    "name": "rrr",
+                    "kind": "bin"
+                }
+            },
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
             "name": "Debug executable 'rrr'",
             "cargo": {
                 "args": [
@@ -20,7 +36,8 @@
                 }
             },
             "args": [
-                "tui"
+                "play",
+                "1",
             ],
             "cwd": "${workspaceFolder}",
         },

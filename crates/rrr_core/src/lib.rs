@@ -41,26 +41,25 @@
 #![forbid(unsafe_code)]
 
 pub mod actions;
-pub mod field;
 pub mod judge;
-pub mod record;
 pub mod turntable;
-
-pub mod prelude {
-    pub use rrr_settings_core::CoreSettings;
-}
 
 use self::{
     actions::NoteAction,
-    field::Field,
     judge::{Judge, JudgeWindow, Judgement},
     turntable::Turntable,
 };
 use anyhow::Result;
 use btreemultimap::{BTreeMultiMap, MultiRange};
-use rrr_chart::{NoteDirection, RuntimeNote};
-use rrr_settings_core::CoreSettings;
+use rrr_chart::RuntimeNote;
+use rrr_settings_core::{prelude::Direction, CoreSettings};
 use std::{borrow::BorrowMut, collections::HashSet};
+
+pub mod prelude {
+    pub use btreemultimap;
+    pub use rrr_chart::{RuntimeChart, RuntimeNote};
+    pub use rrr_settings_core::CoreSettings;
+}
 
 #[derive(Debug, Default, Clone)]
 pub struct JudgementReport {
@@ -72,8 +71,8 @@ pub struct JudgementReport {
     pub boos: usize,
 }
 
+#[derive(Debug, Default)]
 pub struct Play<S: PlayState> {
-    field: Field,
     state: S,
     settings: CoreSettings,
 }
@@ -84,10 +83,12 @@ impl<S: PlayState> Play<S> {
     }
 }
 
+#[derive(Debug)]
 pub struct Ready {
     turntable: Turntable<turntable::Loaded>,
 }
 
+#[derive(Debug)]
 pub struct Active {
     turntable: Turntable<turntable::Playing>,
     actions: BTreeMultiMap<RuntimeNote, NoteAction>,
@@ -96,6 +97,7 @@ pub struct Active {
     judgement_report: JudgementReport,
 }
 
+#[derive(Debug)]
 pub struct Concluded {
     turntable: Turntable<turntable::Loaded>,
     actions: BTreeMultiMap<RuntimeNote, NoteAction>,
@@ -109,36 +111,24 @@ impl PlayState for Concluded {}
 
 impl Play<Ready> {
     #[must_use]
-    pub fn new(turntable: Turntable<turntable::Loaded>, field: Field) -> Self {
+    pub fn new(turntable: Turntable<turntable::Loaded>) -> Self {
         Self {
             state: Ready { turntable },
             settings: CoreSettings::default(),
-            field,
         }
     }
 
     #[must_use]
     pub fn with_settings(self, settings: CoreSettings) -> Self {
         Self {
-            field: self.field,
             state: self.state,
             settings,
         }
     }
 
     #[must_use]
-    pub fn with_field(self, field: Field) -> Self {
-        Self {
-            field,
-            state: self.state,
-            settings: self.settings,
-        }
-    }
-
-    #[must_use]
     pub fn start_with_audio(self) -> Play<Active> {
         Play {
-            field: self.field,
             state: Active {
                 turntable: self.state.turntable.play_with_audio(),
                 actions: BTreeMultiMap::default(),
@@ -153,7 +143,6 @@ impl Play<Ready> {
     #[must_use]
     pub fn start(self) -> Play<Active> {
         Play {
-            field: self.field,
             state: Active {
                 turntable: self.state.turntable.play(),
                 actions: BTreeMultiMap::default(),
@@ -170,7 +159,6 @@ impl Play<Active> {
     #[must_use]
     pub fn stop(self) -> Play<Ready> {
         Play {
-            field: self.field,
             state: Ready {
                 turntable: self.state.turntable.stop(),
             },
@@ -181,7 +169,6 @@ impl Play<Active> {
     #[must_use]
     pub fn finish(self) -> Play<Concluded> {
         Play {
-            field: self.field,
             state: Concluded {
                 turntable: self.state.turntable.stop(),
                 actions: self.state.actions,
@@ -251,11 +238,6 @@ impl Play<Active> {
     }
 
     #[must_use]
-    pub fn field(&self) -> &Field {
-        &self.field
-    }
-
-    #[must_use]
     pub fn judgement_results(&self) -> &JudgementReport {
         &self.state.judgement_report
     }
@@ -265,7 +247,7 @@ impl Play<Active> {
         &self.state.judge.judgements
     }
 
-    pub fn do_action(&mut self, direction: &NoteDirection, ts: u32, offset: i8) {
+    pub fn do_action(&mut self, direction: &Direction, ts: u32, offset: i8) {
         if let Ok(mut view_result) = self.state.turntable.view(
             120_u32.saturating_add(u32::from(offset.unsigned_abs())),
             120_u32.saturating_add(u32::from(offset.unsigned_abs())),
@@ -289,7 +271,7 @@ impl Play<Active> {
         }
     }
 
-    fn determine_judgable(&self, note: &RuntimeNote, direction: &NoteDirection) -> bool {
+    fn determine_judgable(&self, note: &RuntimeNote, direction: &Direction) -> bool {
         let is_judged = self.state.actions.contains_key(note);
         let is_same_direction = *direction == note.direction;
         !is_judged && is_same_direction
@@ -319,7 +301,6 @@ impl Play<Concluded> {
     #[must_use]
     pub fn finalize(self) -> Play<Ready> {
         Play {
-            field: self.field,
             state: Ready {
                 turntable: self.state.turntable,
             },

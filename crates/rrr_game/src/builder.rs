@@ -1,11 +1,14 @@
-use crate::{Headless, Rendered, RustRustRevolution, SongID};
-use rrr_core::prelude::CoreSettings;
+use crate::{Headless, Rendered, RustRustRevolution};
+use rrr_core::{prelude::CoreSettings, Active, Play};
+use rrr_noteskin::Noteskin;
 use rrr_render::Renderer;
 use rrr_settings::Settings;
+use rrr_time::TimeTrait;
 use std::collections::VecDeque;
 
 pub struct Unknown {}
 pub struct BuildRendered {
+    noteskin: Noteskin,
     renderer: Renderer,
     settings: Settings,
 }
@@ -19,71 +22,97 @@ impl BuilderMode for BuildHeadless {}
 impl BuilderMode for Unknown {}
 
 #[derive(Debug, Default)]
-pub struct RustRustRevolutionBuilder<S: BuilderMode> {
+pub struct RustRustRevolutionBuilder<S: BuilderMode, T: TimeTrait> {
     inner: S,
+    marker: std::marker::PhantomData<T>,
 }
 
-impl RustRustRevolutionBuilder<Unknown> {
+impl<T: TimeTrait> RustRustRevolutionBuilder<Unknown, T> {
     #[must_use]
-    pub fn without_renderer() -> RustRustRevolutionBuilder<BuildHeadless> {
+    pub fn without_renderer() -> RustRustRevolutionBuilder<BuildHeadless, T> {
         RustRustRevolutionBuilder {
             inner: BuildHeadless {
                 settings: CoreSettings::default(),
             },
+            marker: std::marker::PhantomData,
         }
     }
 
     #[must_use]
-    pub fn with_renderer(renderer: Renderer) -> RustRustRevolutionBuilder<BuildRendered> {
+    pub fn with_renderer(renderer: Renderer) -> RustRustRevolutionBuilder<BuildRendered, T> {
         RustRustRevolutionBuilder {
             inner: BuildRendered {
+                noteskin: Noteskin::default(),
                 renderer,
                 settings: Settings::default(),
             },
+            marker: std::marker::PhantomData,
         }
     }
 }
 
-impl RustRustRevolutionBuilder<BuildHeadless> {
+impl<T: TimeTrait> RustRustRevolutionBuilder<BuildHeadless, T> {
     #[must_use]
     pub fn with_settings(self, settings: CoreSettings) -> Self {
         RustRustRevolutionBuilder {
             inner: BuildHeadless { settings },
+            marker: std::marker::PhantomData,
         }
     }
 
     #[must_use]
-    pub fn build(self, active_song_id: SongID) -> RustRustRevolution<Headless> {
+    pub fn build(self, play_state: Play<Active>) -> RustRustRevolution<Headless, T> {
         RustRustRevolution {
-            _inner: Headless {
-                _settings: self.inner.settings,
+            state: Headless {
+                settings: self.inner.settings,
             },
             actions: VecDeque::with_capacity(usize::from(u8::MAX)),
-            _active_song_id: active_song_id,
+            start_instant: T::now(),
+            previous_instant: T::now(),
+            current_instant: T::now(),
+            play_state,
         }
     }
 }
 
-impl RustRustRevolutionBuilder<BuildRendered> {
+impl<T: TimeTrait> RustRustRevolutionBuilder<BuildRendered, T> {
     #[must_use]
     pub fn with_settings(self, settings: Settings) -> Self {
         RustRustRevolutionBuilder {
             inner: BuildRendered {
+                noteskin: self.inner.noteskin,
                 renderer: self.inner.renderer,
                 settings,
             },
+            marker: std::marker::PhantomData,
         }
     }
 
     #[must_use]
-    pub fn build(self, active_song_id: SongID) -> RustRustRevolution<Rendered> {
+    pub fn with_noteskin(self, noteskin: Noteskin) -> Self {
+        RustRustRevolutionBuilder {
+            inner: BuildRendered {
+                noteskin,
+                renderer: self.inner.renderer,
+                settings: self.inner.settings,
+            },
+            marker: std::marker::PhantomData,
+        }
+    }
+
+    #[must_use]
+    pub fn build(self, play_state: Play<Active>) -> RustRustRevolution<Rendered, T> {
         RustRustRevolution {
-            _inner: Rendered {
-                _renderer: self.inner.renderer,
-                _settings: self.inner.settings,
+            state: Rendered {
+                noteskin: self.inner.noteskin,
+                renderer: self.inner.renderer,
+                settings: self.inner.settings,
             },
             actions: VecDeque::with_capacity(usize::from(u8::MAX)),
-            _active_song_id: active_song_id,
+            start_instant: T::now(),
+            previous_instant: T::now(),
+            current_instant: T::now(),
+            play_state,
         }
     }
 }

@@ -1,20 +1,23 @@
-use super::record::Record;
 use anyhow::Result;
 use btreemultimap::MultiRange;
 use rrr_audio::AudioPlayer;
 use rrr_chart::RuntimeNote;
+use rrr_record::record::Record;
 use std::{borrow::BorrowMut, ops::Bound::Included};
 
-#[derive(Clone)]
+#[derive(Debug)]
 pub struct Turntable<S: TurntableState> {
     record: Record,
     state: S,
 }
 
+#[derive(Debug)]
 pub struct Empty {}
 
+#[derive(Debug)]
 pub struct Loaded {}
 
+#[derive(Debug)]
 pub struct Playing {
     pub progress: u32,
     audio_player: Option<AudioPlayer>,

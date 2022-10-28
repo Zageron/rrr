@@ -1,8 +1,8 @@
 use rrr_settings_core::CoreSettings;
-use std::convert::From;
-
-#[cfg(feature = "serde")]
+use rrr_types::ReceptorPosition;
+use rrr_types::ScrollDirection;
 use serde::{Deserialize, Serialize};
+use std::convert::From;
 
 impl From<Settings> for CoreSettings {
     fn from(item: Settings) -> Self {
@@ -11,15 +11,35 @@ impl From<Settings> for CoreSettings {
 }
 
 /// Stores RRR settings to start charts with.
-#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]
+#[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
 pub struct Settings {
     pub core: CoreSettings,
+    pub gap: u8,
     pub note_offset: i32,
+    pub scroll_speed: u32,
+    pub scroll_direction: ScrollDirection,
+    pub receptor_position: ReceptorPosition,
+}
+
+impl Default for Settings {
+    fn default() -> Self {
+        Self {
+            core: Default::default(),
+            gap: 8,
+            note_offset: -100,
+            scroll_speed: 1500,
+            scroll_direction: ScrollDirection::default(),
+            receptor_position: ReceptorPosition::default(),
+        }
+    }
 }
 
 #[cfg(test)]
 mod tests {
+    use std::collections::HashMap;
+
+    use rrr_types::ReceptorPosition;
+
     use super::*;
 
     #[test]
@@ -29,12 +49,25 @@ mod tests {
 
     #[test]
     fn from_settings_to_core() {
+        use rrr_settings_core::prelude::*;
         let settings = Settings {
-            core: CoreSettings { judge_offset: 100 },
+            core: CoreSettings {
+                judge_offset: 100,
+                key_to_direction_map: HashMap::from([
+                    (KeyCode::Left, Direction::Left),
+                    (KeyCode::Down, Direction::Down),
+                    (KeyCode::Up, Direction::Up),
+                    (KeyCode::Right, Direction::Right),
+                ]),
+            },
+            gap: 8,
             note_offset: -100,
+            scroll_speed: 1500,
+            scroll_direction: ScrollDirection::default(),
+            receptor_position: ReceptorPosition::default(),
         };
 
-        let core_settings: CoreSettings = settings.into();
+        let core_settings: CoreSettings = settings.clone().into();
         assert_eq!(settings.core, core_settings);
     }
 }

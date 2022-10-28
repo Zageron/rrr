@@ -16,8 +16,8 @@ btreemultimap = "0.1.0"
 log = "0.4.17"
 rrr_audio = { path = "../rrr_audio" }
 rrr_chart = { path = "../rrr_chart" }
+rrr_record = { path = "../rrr_record" }
 rrr_settings_core = { path = "../rrr_settings_core" }
-
 
 [dev-dependencies]
 rrr_math = { path = "../rrr_math" }

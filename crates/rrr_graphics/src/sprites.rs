@@ -1,26 +1,5 @@
 use image::{DynamicImage, GenericImageView, SubImage};
-
-pub enum Direction {
-    Left,
-    Down,
-    Up,
-    Right,
-}
-
-pub trait DirectionValue {
-    fn value(&self) -> Direction;
-}
-
-impl DirectionValue for Direction {
-    fn value(&self) -> Direction {
-        match self {
-            Direction::Left => Direction::Left,
-            Direction::Down => Direction::Down,
-            Direction::Up => Direction::Up,
-            Direction::Right => Direction::Right,
-        }
-    }
-}
+use rrr_types::Direction;
 
 /// Drawables can be blitted to the pixel buffer and animated.
 pub trait Drawable<'a> {
@@ -29,13 +8,13 @@ pub trait Drawable<'a> {
     fn pixels(&self) -> SubImage<&'a DynamicImage>;
 }
 
-pub fn blit<'a, S, NoteDir: DirectionValue>(
+pub fn blit<'a, S>(
     screen: &mut [u8],
     screen_width: u32,
     screen_height: u32,
     dest_x: f32,
     dest_y: f32,
-    dir: &NoteDir,
+    dir: &Direction,
     drawable: &S,
 ) where
     S: Drawable<'a>,
@@ -61,7 +40,7 @@ pub fn blit<'a, S, NoteDir: DirectionValue>(
             // I make no guarantees that this will work with a non-square drawable
             let mut source_x: u32;
             let mut source_y: u32;
-            match dir.value() {
+            match dir {
                 Direction::Down => {
                     source_x = ((screen_x as f32) - dest_x).round() as u32;
                     source_y = ((screen_y as f32) - dest_y).round() as u32;

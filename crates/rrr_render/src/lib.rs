@@ -4,12 +4,71 @@ use pixels::{
     wgpu::Color,
     Pixels, PixelsBuilder, SurfaceTexture,
 };
+use rrr_chart::RuntimeNote;
+use rrr_noteskin::Noteskin;
+use rrr_types::ReceptorPosition;
 
-pub mod sprites;
+pub mod field;
 
 #[derive(Debug)]
 pub struct Renderer {
     pub pixels: Pixels,
+    pub width: u32,
+    pub height: u32,
+}
+
+impl Renderer {
+    pub fn render_field<'a>(
+        &mut self,
+        view: impl IntoIterator<Item = (&'a u32, &'a RuntimeNote)>,
+        chart_progress: u32,
+        start_position: i32,
+        end_position: i32,
+        receptor_position: ReceptorPosition,
+        time_on_screen: u32,
+        noteskin: &Noteskin,
+        gap: u8,
+        ms_offset: i32,
+    ) -> Result<()> {
+        let frame: &mut [u8] = self.pixels.get_frame_mut();
+        field::clear(frame);
+
+        // Draw the zero point of the notes.
+        // These offsets don't make much sense.
+        field::draw_line(frame, receptor_position, self.height, self.width);
+
+        let offset = self.width as f32 / 2.0 - noteskin.note_width as f32 * 0.5;
+
+        field::draw_receptors(
+            noteskin,
+            frame,
+            offset,
+            receptor_position
+                .0
+                .saturating_sub(noteskin.note_height.saturating_div(2) as u32) as f32,
+            gap,
+            self.width,
+            self.height,
+        );
+
+        field::draw_notes(
+            view,
+            time_on_screen,
+            chart_progress,
+            ms_offset,
+            offset,
+            frame,
+            noteskin,
+            gap,
+            self.width,
+            self.height,
+            start_position,
+            end_position,
+        );
+
+        self.pixels.render()?;
+        Ok(())
+    }
 }
 
 #[derive(Debug)]
@@ -48,6 +107,10 @@ impl<'win, W: HasRawWindowHandle + HasRawDisplayHandle> RendererBuilder<'win, W>
             .build_async()
             .await?;
 
-        Ok(Renderer { pixels })
+        Ok(Renderer {
+            pixels,
+            width: self.width,
+            height: self.height,
+        })
     }
 }

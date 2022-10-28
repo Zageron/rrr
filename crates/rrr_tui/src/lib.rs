@@ -5,7 +5,11 @@ use crossterm::{
     terminal::{disable_raw_mode, enable_raw_mode, EnterAlternateScreen, LeaveAlternateScreen},
 };
 use rrr_config::Config;
-use rrr_game::{prelude::SongID, RustRustRevolutionBuilder};
+use rrr_game::{
+    prelude::{Play, RuntimeChart, Turntable},
+    RustRustRevolutionBuilder,
+};
+use rrr_record::record::Record;
 use rrr_window::{
     prelude::{EventLoopBuilder, EventLoopExtRunReturn},
     Window,
@@ -123,7 +127,7 @@ pub fn init() -> Result<()> {
 
     let mut event_loop = EventLoopBuilder::new().build();
     loop {
-        if let Ok(song_id) = rx.try_recv() {
+        if let Ok(_song_id) = rx.try_recv() {
             {
                 let config = Config::default();
                 let mut window = Window::new(config, &mut event_loop)?;
@@ -132,8 +136,17 @@ pub fn init() -> Result<()> {
                         .build()
                         .await
                 })?;
-                let mut rrr =
-                    RustRustRevolutionBuilder::with_renderer(renderer).build(SongID(song_id));
+
+                // Load chart with song_id
+
+                let mp3 = Vec::<u8>::default();
+                let chart = RuntimeChart::default();
+                let record = Record::new(mp3, chart);
+                let turntable = Turntable::load(record.unwrap());
+                let play = Play::new(turntable);
+
+                let mut rrr = RustRustRevolutionBuilder::with_renderer(renderer)
+                    .build(play.start_with_audio());
                 window.run_once(&mut rrr);
             }
 

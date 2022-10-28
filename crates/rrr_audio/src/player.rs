@@ -23,6 +23,15 @@ pub struct AudioPlayer {
     remaining_samples: usize,
 }
 
+impl Debug for AudioPlayer {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.debug_struct("AudioPlayer")
+            .field("_track_id", &self._track_id)
+            .field("remaining_samples", &self.remaining_samples)
+            .finish()
+    }
+}
+
 impl AudioPlayer {
     /// # Panics
     /// # Errors
@@ -94,8 +103,15 @@ impl AudioPlayer {
                         let duration = decoded.capacity() as u64;
 
                         // Try to open the audio output.
-                        self.output
-                            .replace(output::try_open(spec, duration).unwrap());
+                        match output::try_open(spec, duration) {
+                            Ok(stream) => {
+                                self.output.replace(stream);
+                            }
+                            Err(e) => {
+                                log::error!("Invalid Audio Stream: {:?}", e);
+                                return None;
+                            }
+                        }
                     }
 
                     let frame_count = decoded.frames();
@@ -149,11 +165,5 @@ impl AudioPlayer {
         if let Some(v) = self.output.as_mut() {
             v.flush();
         }
-    }
-}
-
-impl Debug for AudioPlayer {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        f.debug_struct("Player").finish()
     }
 }

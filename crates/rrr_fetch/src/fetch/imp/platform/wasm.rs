@@ -49,7 +49,7 @@ impl Fetcher {
     }
 
     #[wasm_bindgen]
-    pub async fn fetch(self) -> Array {
+    pub async fn fetch_js(self) -> Array {
         let mut stream = self.stream;
         let mut bytes: Vec<u8> = Vec::with_capacity(self.len);
         while let Some(Ok(chunk)) = stream.next().await {
@@ -58,6 +58,19 @@ impl Fetcher {
         }
 
         bytes.into_iter().map(JsValue::from).collect()
+    }
+}
+
+impl Fetcher {
+    pub async fn fetch(self) -> Vec<u8> {
+        let mut stream = self.stream;
+        let mut bytes: Vec<u8> = Vec::with_capacity(self.len);
+        while let Some(Ok(chunk)) = stream.next().await {
+            let buffer = Uint8Array::new(&chunk);
+            bytes.extend(buffer.to_vec());
+        }
+
+        bytes
     }
 }
 

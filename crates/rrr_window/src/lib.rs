@@ -2,6 +2,7 @@ use anyhow::{anyhow, Result};
 use rrr_config::Config;
 use rrr_game::{hit_action, Rendered, RustRustRevolution};
 use rrr_input::KeyCode;
+use rrr_time::Time;
 use winit::{
     dpi::{PhysicalPosition, PhysicalSize},
     event::{TouchPhase, VirtualKeyCode},
@@ -39,9 +40,10 @@ impl<'e> Window<'e> {
         Ok(Self { event_loop, window })
     }
 
-    pub fn run_once(&mut self, rrr: &mut RustRustRevolution<Rendered>) {
+    pub fn run_once(&mut self, rrr: &mut RustRustRevolution<Rendered, Time>) {
         self.window.focus_window();
 
+        let window = &self.window;
         self.event_loop.run_return(move |event, _, control_flow| {
             control_flow.set_poll();
 
@@ -60,11 +62,21 @@ impl<'e> Window<'e> {
 
                 winit::event::Event::Resumed => {}
 
-                winit::event::Event::MainEventsCleared => {}
+                winit::event::Event::MainEventsCleared => {
+                    rrr.update();
+                    let _ = rrr.draw();
+                    window.set_inner_size(PhysicalSize {
+                        width: rrr.width(),
+                        height: rrr.height(),
+                    }); // Is this needed?
+                    window.request_redraw();
+                }
 
                 winit::event::Event::RedrawRequested(_) => {}
 
-                winit::event::Event::RedrawEventsCleared => {}
+                winit::event::Event::RedrawEventsCleared => {
+                    rrr.finish();
+                }
 
                 winit::event::Event::LoopDestroyed => {}
 

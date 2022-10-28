@@ -27,6 +27,11 @@ workspace = false
 command = "cargo"
 args = ["install", "--path", "."]
 
+[tasks.run]
+workspace = false
+command = "cargo"
+args = ["run", "--example", "native"]
+
 [tasks.watch]
 workspace = false
 command = "cargo"

@@ -10,9 +10,18 @@ edition = "2021"
 publish = false
 rust-version = "1.64.0"
 
+[features]
+default = ["develop"]
+develop = ["log/max_level_info", "log/release_max_level_info"]
+release = ["log/release_max_level_off"]
+
 [dependencies]
+anyhow = "1.0.66"
+log = "0.4.17"
 rrr_core = { path = "../rrr_core" }
 rrr_input = { path = "../rrr_input" }
+rrr_noteskin = { path = "../rrr_noteskin" }
 rrr_render = { path = "../rrr_render" }
 rrr_settings = { path = "../rrr_settings" }
+rrr_time = { path = "../rrr_time" }
 rrr_types = { path = "../rrr_types" }
