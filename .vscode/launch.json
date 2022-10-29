@@ -7,22 +7,6 @@
         {
             "type": "lldb",
             "request": "launch",
-            "name": "Debug example 'native'",
-            "cargo": {
-                "args": [
-                    "build",
-                    "--example=native",
-                    "--package=rrr"
-                ],
-                "filter": {
-                    "name": "rrr",
-                    "kind": "bin"
-                }
-            },
-        },
-        {
-            "type": "lldb",
-            "request": "launch",
             "name": "Debug executable 'rrr'",
             "cargo": {
                 "args": [
@@ -35,11 +19,8 @@
                     "kind": "bin"
                 }
             },
-            "args": [
-                "play",
-                "1",
-            ],
-            "cwd": "${workspaceFolder}",
+            "args": [],
+            "cwd": "${workspaceFolder}"
         },
         {
             "type": "lldb",
@@ -63,6 +44,80 @@
         {
             "type": "lldb",
             "request": "launch",
+            "name": "Debug example 'native'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--example=native",
+                    "--package=rrr"
+                ],
+                "filter": {
+                    "name": "native",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in example 'native'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--example=native",
+                    "--package=rrr"
+                ],
+                "filter": {
+                    "name": "native",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug example 'wasm_benchmark'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--example=wasm_benchmark",
+                    "--package=rrr"
+                ],
+                "filter": {
+                    "name": "wasm_benchmark",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in example 'wasm_benchmark'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--example=wasm_benchmark",
+                    "--package=rrr"
+                ],
+                "filter": {
+                    "name": "wasm_benchmark",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        }
+        {
+            "type": "lldb",
+            "request": "launch",
             "name": "Debug unit tests in library 'rrr_audio'",
             "cargo": {
                 "args": [
@@ -82,6 +137,25 @@
         {
             "type": "lldb",
             "request": "launch",
+            "name": "Debug unit tests in library 'rrr_bench'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--lib",
+                    "--package=rrr_bench"
+                ],
+                "filter": {
+                    "name": "rrr_bench",
+                    "kind": "lib"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
             "name": "Debug unit tests in library 'rrr_chart'",
             "cargo": {
                 "args": [
@@ -92,6 +166,25 @@
                 ],
                 "filter": {
                     "name": "rrr_chart",
+                    "kind": "lib"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in library 'rrr_types'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--lib",
+                    "--package=rrr_types"
+                ],
+                "filter": {
+                    "name": "rrr_types",
                     "kind": "lib"
                 }
             },
@@ -139,6 +232,25 @@
         {
             "type": "lldb",
             "request": "launch",
+            "name": "Debug unit tests in library 'rrr_record'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--lib",
+                    "--package=rrr_record"
+                ],
+                "filter": {
+                    "name": "rrr_record",
+                    "kind": "lib"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
             "name": "Debug unit tests in library 'rrr_settings_core'",
             "cargo": {
                 "args": [
@@ -149,6 +261,25 @@
                 ],
                 "filter": {
                     "name": "rrr_settings_core",
+                    "kind": "lib"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in library 'rrr_input'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--lib",
+                    "--package=rrr_input"
+                ],
+                "filter": {
+                    "name": "rrr_input",
                     "kind": "lib"
                 }
             },
@@ -215,6 +346,25 @@
         {
             "type": "lldb",
             "request": "launch",
+            "name": "Debug unit tests in library 'rrr_playlist'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--lib",
+                    "--package=rrr_playlist"
+                ],
+                "filter": {
+                    "name": "rrr_playlist",
+                    "kind": "lib"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
             "name": "Debug unit tests in library 'rrr_game'",
             "cargo": {
                 "args": [
@@ -234,16 +384,35 @@
         {
             "type": "lldb",
             "request": "launch",
-            "name": "Debug unit tests in library 'rrr_input'",
+            "name": "Debug unit tests in library 'rrr_noteskin'",
             "cargo": {
                 "args": [
                     "test",
                     "--no-run",
                     "--lib",
-                    "--package=rrr_input"
+                    "--package=rrr_noteskin"
                 ],
                 "filter": {
-                    "name": "rrr_input",
+                    "name": "rrr_noteskin",
+                    "kind": "lib"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in library 'rrr_graphics'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--lib",
+                    "--package=rrr_graphics"
+                ],
+                "filter": {
+                    "name": "rrr_graphics",
                     "kind": "lib"
                 }
             },
@@ -282,25 +451,6 @@
                 ],
                 "filter": {
                     "name": "rrr_settings",
-                    "kind": "lib"
-                }
-            },
-            "args": [],
-            "cwd": "${workspaceFolder}"
-        },
-        {
-            "type": "lldb",
-            "request": "launch",
-            "name": "Debug unit tests in library 'rrr_noteskin'",
-            "cargo": {
-                "args": [
-                    "test",
-                    "--no-run",
-                    "--lib",
-                    "--package=rrr_noteskin"
-                ],
-                "filter": {
-                    "name": "rrr_noteskin",
                     "kind": "lib"
                 }
             },
