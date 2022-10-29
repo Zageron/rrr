@@ -60,8 +60,8 @@ impl Mode for Headless {
 
 impl<S: Mode, T: TimeTrait> RustRustRevolution<S, T> {
     pub fn hit(&mut self, action_builder: hit_action::Builder<hit_action::NeedsTimestamp>) {
-        self.actions.push_back(action_builder.build(u32::MAX));
-        log::info!("HIT");
+        self.actions
+            .push_back(action_builder.build((self.start_instant.ms_since() * 1000.) as u32));
     }
 
     pub fn update(&mut self) {
