@@ -29,6 +29,7 @@ pub struct RustRustRevolution<S: Mode, T: TimeTrait> {
     start_instant: T,
     previous_instant: T,
     current_instant: T,
+    pub delta: f64,
 }
 
 #[derive(Debug)]
@@ -66,7 +67,7 @@ impl<S: Mode, T: TimeTrait> RustRustRevolution<S, T> {
 
     pub fn update(&mut self) {
         self.current_instant = T::now();
-        let _delta = self.current_instant.sub(&self.previous_instant);
+        self.delta = self.current_instant.sub(&self.previous_instant);
         let current_progress = (self.start_instant.ms_since() * 1000.) as u32;
 
         for action in self.actions.drain(..) {

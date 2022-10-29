@@ -1,7 +1,7 @@
-#![forbid(unsafe_code)]
 #![allow(unused)]
 
 use anyhow::{self, Result};
+use js_sys::Function;
 pub use rrr_fetch::platform::Fetcher;
 use rrr_fetch::{Chart, FetchProgress};
 use rrr_game::{
@@ -26,6 +26,11 @@ use winit::{
     window::{self, Window, WindowBuilder},
 };
 
+#[cfg(feature = "bench")]
+mod benchmark_callback;
+#[cfg(feature = "bench")]
+use rrr_bench::{BenchmarkData, BenchmarkResults};
+
 #[wasm_bindgen(inspectable)]
 #[derive(Debug)]
 pub struct RRR {
@@ -43,6 +48,13 @@ pub struct RRR {
 #[wasm_bindgen]
 impl RRR {
     pub fn run_once(mut self) {
+        #[cfg(feature = "bench")]
+        let bench = benchmark_callback::BenchmarkCallback {};
+        #[cfg(feature = "bench")]
+        let mut bench_data = BenchmarkData::default();
+        #[cfg(feature = "bench")]
+        let mut bench_counter = 0;
+
         wasm_bindgen_futures::spawn_local(async move {
             self.event_loop.run(move |in_event, _, control_flow| {
                 control_flow.set_poll();
@@ -63,6 +75,20 @@ impl RRR {
 
                     winit::event::Event::MainEventsCleared => {
                         self.rrr.update();
+
+                        #[cfg(feature = "bench")]
+                        {
+                            bench_data.add_frame_time(self.rrr.delta as f32);
+                            if bench_counter > 60 {
+                                bench_counter = 0;
+                                unsafe {
+                                    bench.run(&bench_data);
+                                }
+                            } else {
+                                bench_counter += 1;
+                            }
+                        }
+
                         self.rrr.draw();
                         self.window.set_inner_size(PhysicalSize {
                             width: self.rrr.width(),
@@ -170,6 +196,13 @@ impl RRRBuilder {
     #[wasm_bindgen]
     pub fn with_canvas(self, canvas: Option<HtmlCanvasElement>) -> RRRBuilder {
         Self { canvas }
+    }
+
+    #[wasm_bindgen]
+    pub fn with_benchmarking(self) -> RRRBuilder {
+        Self {
+            canvas: self.canvas,
+        }
     }
 
     #[wasm_bindgen]

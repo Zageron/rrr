@@ -1,8 +1,15 @@
 [package]
 name = "rrr_bench"
+description = "Benchmarking helpers"
 version = "0.1.0"
+authors = ["Zageron <hello@zageron.ca>"]
+homepage = "https://github.com/flashflashrevolution/rrr"
+repository = "https://github.com/flashflashrevolution/rrr"
+license = "AGPL-3.0"
 edition = "2021"
+publish = false
+rust-version = "1.66.0"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
-[dependencies]
+[target.'cfg(target_arch = "wasm32")'.dependencies]
+wasm-bindgen = "0.2.83"

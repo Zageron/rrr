@@ -1978,6 +1978,9 @@ dependencies = [
 [[package]]
 name = "rrr_bench"
 version = "0.1.0"
+dependencies = [
+ "wasm-bindgen",
+]
 
 [[package]]
 name = "rrr_chart"
@@ -2181,8 +2184,10 @@ dependencies = [
  "anyhow",
  "console_error_panic_hook",
  "console_log",
+ "js-sys",
  "log",
  "pixels",
+ "rrr_bench",
  "rrr_fetch",
  "rrr_game",
  "rrr_input",

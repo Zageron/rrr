@@ -22,9 +22,6 @@ path = "src/main.rs"
 name = "native"
 test = true
 
-[[example]]
-name = "wasm_benchmark"
-
 [features]
 default = ["tui", "window", "develop"]
 develop = ["log/max_level_info", "log/release_max_level_info"]
