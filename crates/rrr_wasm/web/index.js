@@ -19,9 +19,7 @@ async function main() {
     // Possible fetch progress reference https://javascript.info/fetch-progress
     var fetcher = await Fetcher.new(`https://www.flashflashrevolution.com/game/r3/r3-songLoad.php?id=${hash}&mode=2&type=ChartFFR_music`);
     var value = await fetcher.fetch_js();
-    console.log(value);
-
-    var rrr = await new RRRBuilder().with_canvas(canvas).build();
+    var rrr = await new RRRBuilder().with_canvas(canvas).build(value);
     rrr.run_once();
 }
 
