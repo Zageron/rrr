@@ -2,7 +2,7 @@ use rrr_chart::{NoteColor, RuntimeNote};
 use rrr_graphics::sprites;
 use rrr_math::lerp::Lerp;
 use rrr_noteskin::Noteskin;
-use rrr_types::{Direction, ReceptorPosition};
+use rrr_types::Direction;
 
 /// Standard time on screen is hard-coded to 1000 milliseconds.
 /// Use this function with a user set multiplier to get actual time on screen..
