@@ -25,3 +25,7 @@ serde = { version = "1.0.147", features = ["derive"] }
 strum = { version = "0.24.1", features = ["derive"] }
 swf = { version = "0.2.0", optional = true }
 thiserror = "1.0.37"
+
+
+[dev-dependencies]
+simple_logger = "4.0.0"

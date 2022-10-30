@@ -9,6 +9,7 @@ use ::swf::{
 };
 use rrr_types::Direction;
 use std::ops::ControlFlow;
+use swf::SwfStr;
 use thiserror::Error;
 
 #[derive(Error, Debug)]
@@ -103,7 +104,11 @@ impl SwfParser<Parsing> {
         );
         while let Ok(tag) = swf_reader.read_tag() {
             match tag {
-                swf::Tag::DefineSound(_) => log::info!("DefineSound"),
+                // This is for files that do not have a block of audio at the front.
+                swf::Tag::DefineSound(sound) => {
+                    println!("DefineSound: {:?}", sound)
+                }
+
                 swf::Tag::DoAction(action) => {
                     let res = SwfParser::parse_action(action, swf_reader.version());
                     match res {
@@ -111,9 +116,17 @@ impl SwfParser<Parsing> {
                         Err(e) => println!("Error when parsing the swf: {}", e),
                     }
                 }
+
+                // One Shot of all of the audio
+                // TODO: Bug: If the length of the tag - 4 is 0, it is invalid.
                 swf::Tag::SoundStreamBlock(sound) => {
+                    if sound.len() - 4 == 0 {
+                        log::error!("No song data, this is invalid!")
+                    }
                     self.state.mp3.extend_from_slice(sound);
                 }
+
+                // This is audio metadata.
                 swf::Tag::SoundStreamHead(ssh) => {
                     log::info!("SoundStreamHead");
                     log::info!("latency seek: {}", ssh.latency_seek);
@@ -121,7 +134,13 @@ impl SwfParser<Parsing> {
                     log::info!("num samples per block: {}", ssh.num_samples_per_block);
                     log::info!("stream format: {:?}", ssh.stream_format);
                 }
-                swf::Tag::SoundStreamHead2(_) => log::info!("SoundStreamHead2"),
+                swf::Tag::SoundStreamHead2(ssh) => {
+                    log::info!("SoundStreamHead");
+                    log::info!("latency seek: {}", ssh.latency_seek);
+                    log::info!("playback format: {:?}", ssh.playback_format);
+                    log::info!("num samples per block: {}", ssh.num_samples_per_block);
+                    log::info!("stream format: {:?}", ssh.stream_format);
+                }
                 _ => {}
             }
         }
@@ -140,9 +159,8 @@ impl SwfParser<Parsing> {
 
     fn parse_action(action_raw: &[u8], version: u8) -> anyhow::Result<Vec<RuntimeNote>> {
         let mut action_reader = avm1::read::Reader::new(action_raw, version);
-        let mut is_chart_data = false;
         let mut constant_pool: Option<ConstantPool<'_>> = None;
-        let mut value_stack: Vec<Value<'_>> = Vec::with_capacity(4);
+        let mut value_stack: Vec<Value<'_>> = Vec::with_capacity(6);
         let mut beat_box: Vec<RuntimeNote> = Vec::new();
 
         let mut done = false;
@@ -150,23 +168,28 @@ impl SwfParser<Parsing> {
             if let Ok(action) = action_reader.read_action() {
                 match action {
                     avm1::types::Action::ConstantPool(cp) => {
-                        constant_pool.replace(cp);
+                        let is_chart_data = cp.strings.contains(&SwfStr::from_utf8_str("beatBox"));
+                        if is_chart_data {
+                            constant_pool.replace(cp);
+                        } else {
+                            break;
+                        }
                     }
 
                     avm1::types::Action::Push(mut push_object) => {
                         if let ControlFlow::Break(_) =
-                            parse_push_action(is_chart_data, &mut push_object, &mut value_stack)
+                            parse_push_action(&mut push_object, &mut value_stack)
                         {
                             continue;
                         }
                     }
 
-                    avm1::types::Action::End | avm1::types::Action::Stop => {
+                    avm1::types::Action::End => {
                         done = true;
                     }
 
                     avm1::types::Action::GetVariable => {
-                        is_chart_data = true;
+                        // Pop the last item on the stack and do something with it.
                     }
 
                     avm1::types::Action::InitArray => {
@@ -175,28 +198,41 @@ impl SwfParser<Parsing> {
                             continue;
                         }
 
-                        let beat_position = parse_beat_position(&mut value_stack);
-                        let direction = parse_direction(&mut value_stack, &constant_pool);
-                        let color = parse_color(&mut value_stack, &constant_pool);
-                        let timestamp = parse_timestamp(&mut value_stack);
-
-                        if let (Ok(bp), Ok(dir), Ok(col), Ok(ts)) =
-                            (beat_position, direction, color, timestamp)
-                        {
-                            beat_box.push(RuntimeNote {
-                                beat_position: bp,
-                                direction: dir,
-                                color: col,
-                                timestamp: ts,
-                            });
+                        let items_to_pop = if let Some(Value::Int(length)) = value_stack.pop() {
+                            log::info!("Number of items to create init for {}", length);
+                            length
                         } else {
-                            anyhow::bail!(ChartParseError::Timestamp);
+                            anyhow::bail!("There was not an int on the end so you broke it.")
+                        };
+
+                        if value_stack.len() < items_to_pop as usize {
+                            log::info!("We are done.");
+                            // We're done!
+                            break; // Probably
                         }
+
+                        let beat_position = parse_beat_position(&mut value_stack)?;
+                        let direction = parse_direction(&mut value_stack, &constant_pool)?;
+
+                        let color = match items_to_pop > 2 {
+                            true => parse_color(&mut value_stack, &constant_pool)?,
+                            false => NoteColor::Blue,
+                        };
+
+                        let timestamp = match items_to_pop > 3 {
+                            true => parse_timestamp(&mut value_stack)?,
+                            false => beat_position / 30 * 1000,
+                        };
+
+                        beat_box.push(RuntimeNote {
+                            beat_position,
+                            direction,
+                            color,
+                            timestamp,
+                        });
                     }
 
-                    avm1::types::Action::SetMember => {
-                        is_chart_data = false;
-                    }
+                    avm1::types::Action::SetMember => {}
 
                     _ => {
                         log::error!("Unexpectedly unhandled action: {:?}", action);
@@ -206,10 +242,6 @@ impl SwfParser<Parsing> {
         }
 
         if beat_box.is_empty() {
-            if is_chart_data {
-                anyhow::bail!(ChartParseError::BeatPosition);
-            }
-
             anyhow::bail!("Not chart data.");
         }
 
@@ -250,6 +282,7 @@ fn parse_color(
             "pink" => Ok(NoteColor::Pink),
             "purple" => Ok(NoteColor::Purple),
             "cyan" => Ok(NoteColor::Cyan),
+            "white" => Ok(NoteColor::White),
             _ => anyhow::bail!(ChartParseError::NoteColor),
         }
     } else {
@@ -288,29 +321,74 @@ fn parse_beat_position(value_stack: &mut Vec<Value<'_>>) -> anyhow::Result<u32> 
 }
 
 fn parse_push_action<'a>(
-    is_chart_data: bool,
-    push_object: &mut avm1::types::Push<'a>,
+    pushed_objects: &mut avm1::types::Push<'a>,
     value_stack: &mut Vec<Value<'a>>,
 ) -> ControlFlow<()> {
-    if !is_chart_data {
-        return ControlFlow::Break(());
-    }
-
-    if push_object.values.len() < 2 {
-        return ControlFlow::Break(());
-    }
-
-    let real_size = push_object.values.pop();
-    let total_size = push_object.values.len();
-    let garbage = if let Some(Value::Int(len)) = real_size {
-        total_size.checked_sub(len.try_into().unwrap()).unwrap()
-    } else {
-        0
-    };
-
-    for i in garbage..total_size {
-        value_stack.push(push_object.values.get(i).unwrap().clone());
+    for object in pushed_objects.values.clone() {
+        value_stack.push(object);
     }
 
     ControlFlow::Continue(())
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::{NoteColor, RuntimeChart};
+
+    use super::SwfParser;
+    use anyhow::{self, Result};
+
+    fn parse_chart(raw_swf: &[u8]) -> Result<RuntimeChart, swf::error::Error> {
+        if simple_logger::init().is_err() {
+            println!("error");
+            assert!(false)
+        }
+
+        let mut vec = Vec::<u8>::new();
+        vec.extend_from_slice(raw_swf);
+
+        let parser = SwfParser::new(vec);
+        let parser_decomp_result = parser.decompress()?;
+
+        let mut parsing = parser_decomp_result.parse();
+
+        let _state = parsing.tick();
+        let parsed = parsing.finish();
+
+        let chart = parsed.consume();
+        Ok(chart.chart)
+    }
+
+    #[test]
+    pub fn test_parse_2_cell_chart() -> Result<(), swf::error::Error> {
+        let swf = include_bytes!("./test_assets/test_2.swf");
+        let chart = parse_chart(swf)?;
+        assert!(chart.notes[0].color == NoteColor::Blue);
+        Ok(())
+    }
+
+    #[test]
+    pub fn test_parse_3_cell_chart() -> Result<(), swf::error::Error> {
+        let swf = include_bytes!("./test_assets/test_3.swf");
+        let chart = parse_chart(swf)?;
+        assert!(chart.notes[0].color != NoteColor::Blue);
+        Ok(())
+    }
+
+    #[test]
+    pub fn test_parse_4_cell_chart() -> Result<(), swf::error::Error> {
+        let swf = include_bytes!("./test_assets/test_4.swf");
+        let chart = parse_chart(swf)?;
+        assert!(chart.notes[0].color != NoteColor::Blue);
+        Ok(())
+    }
+
+    #[test]
+    pub fn test_parse_block_audio() -> Result<(), swf::error::Error> {
+        let swf = include_bytes!("./test_assets/test_4_block.swf");
+        let chart = parse_chart(swf)?;
+        assert!(chart.notes[0].color != NoteColor::Blue);
+        Ok(())
+    }
 }

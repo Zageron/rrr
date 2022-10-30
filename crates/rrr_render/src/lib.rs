@@ -104,6 +104,7 @@ impl<'win, W: HasRawWindowHandle + HasRawDisplayHandle> RendererBuilder<'win, W>
                 power_preference: pixels::wgpu::PowerPreference::HighPerformance,
                 ..RequestAdapterOptions::default()
             })
+            .enable_vsync(false)
             .build_async()
             .await?;
 

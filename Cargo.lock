@@ -1991,6 +1991,7 @@ dependencies = [
  "log",
  "rrr_types",
  "serde",
+ "simple_logger",
  "strum",
  "swf",
  "thiserror",
