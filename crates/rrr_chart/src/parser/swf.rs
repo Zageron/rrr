@@ -106,7 +106,8 @@ impl SwfParser<Parsing> {
             match tag {
                 // This is for files that do not have a block of audio at the front.
                 swf::Tag::DefineSound(sound) => {
-                    println!("DefineSound: {:?}", sound)
+                    //println!("DefineSound: {:?}", sound)
+                    self.state.mp3.extend_from_slice(sound.data);
                 }
 
                 swf::Tag::DoAction(action) => {
@@ -339,7 +340,7 @@ mod tests {
     use super::SwfParser;
     use anyhow::{self, Result};
 
-    fn parse_chart(raw_swf: &[u8]) -> Result<RuntimeChart, swf::error::Error> {
+    fn parse_chart(raw_swf: &[u8]) -> Result<Parsed, swf::error::Error> {
         if simple_logger::init().is_err() {
             println!("error");
             assert!(false)
@@ -357,14 +358,14 @@ mod tests {
         let parsed = parsing.finish();
 
         let chart = parsed.consume();
-        Ok(chart.chart)
+        Ok(chart)
     }
 
     #[test]
     pub fn test_parse_2_cell_chart() -> Result<(), swf::error::Error> {
         let swf = include_bytes!("./test_assets/test_2.swf");
         let chart = parse_chart(swf)?;
-        assert!(chart.notes[0].color == NoteColor::Blue);
+        assert!(chart.chart.notes[0].color == NoteColor::Blue);
         Ok(())
     }
 
@@ -372,7 +373,7 @@ mod tests {
     pub fn test_parse_3_cell_chart() -> Result<(), swf::error::Error> {
         let swf = include_bytes!("./test_assets/test_3.swf");
         let chart = parse_chart(swf)?;
-        assert!(chart.notes[0].color != NoteColor::Blue);
+        assert!(chart.chart.notes[0].color != NoteColor::Blue);
         Ok(())
     }
 
@@ -380,7 +381,7 @@ mod tests {
     pub fn test_parse_4_cell_chart() -> Result<(), swf::error::Error> {
         let swf = include_bytes!("./test_assets/test_4.swf");
         let chart = parse_chart(swf)?;
-        assert!(chart.notes[0].color != NoteColor::Blue);
+        assert!(chart.chart.notes[0].color != NoteColor::Blue);
         Ok(())
     }
 
@@ -388,7 +389,7 @@ mod tests {
     pub fn test_parse_block_audio() -> Result<(), swf::error::Error> {
         let swf = include_bytes!("./test_assets/test_4_block.swf");
         let chart = parse_chart(swf)?;
-        assert!(chart.notes[0].color != NoteColor::Blue);
+        assert!(chart.mp3.len() > 0);
         Ok(())
     }
 }
