@@ -1,27 +1,80 @@
 #[cfg_attr(target_arch = "wasm32", wasm_bindgen::prelude::wasm_bindgen)]
-pub struct BenchmarkResults {
-    pub min_frame_time: f32,
-    pub max_frame_time: f32,
-    pub avg_frame_time: f32,
+#[derive(Default, Debug)]
+pub struct Bencher {
+    bench_data: BenchmarkData,
+    previous_tick: u32,
+    accumulator: f64,
+    cached_times: FrameTimes,
 }
 
-impl BenchmarkResults {
-    pub fn new() -> Self {
-        BenchmarkResults {
-            min_frame_time: f32::MAX,
-            max_frame_time: f32::MIN,
-            avg_frame_time: 0.0,
-        }
-    }
+#[cfg_attr(target_arch = "wasm32", wasm_bindgen::prelude::wasm_bindgen)]
+#[derive(Default, Debug, Clone, Copy)]
+pub struct FrameTimes {
+    pub avg_frame_time: f64,
+    pub one_percent_frame_time: f64,
+    pub tenth_percent_frame_time: f64,
 }
 
+#[cfg_attr(target_arch = "wasm32", wasm_bindgen::prelude::wasm_bindgen)]
 #[derive(Default, Debug)]
 pub struct BenchmarkData {
-    pub frame_times: Vec<f32>,
+    frame_times: Vec<u32>,
 }
 
-impl BenchmarkData {
-    pub fn add_frame_time(&mut self, frame_time: f32) {
-        self.frame_times.push(frame_time);
+#[cfg_attr(target_arch = "wasm32", wasm_bindgen::prelude::wasm_bindgen)]
+impl Bencher {
+    #[cfg_attr(
+        target_arch = "wasm32",
+        wasm_bindgen::prelude::wasm_bindgen(constructor)
+    )]
+    pub fn new(now: u32) -> Self {
+        Bencher {
+            bench_data: BenchmarkData::default(),
+            previous_tick: now,
+            accumulator: 0.,
+            cached_times: FrameTimes::default(),
+        }
+    }
+
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen::prelude::wasm_bindgen)]
+    pub fn update(&mut self, now: u32) {
+        let frame_time = now - self.previous_tick;
+        self.add_frame_time(frame_time);
+
+        self.accumulator += frame_time as f64 / 10.;
+        self.previous_tick = now.into();
+
+        if self.accumulator >= 60. {
+            let times = &mut self.bench_data.frame_times;
+            times.sort_unstable_by(|x, y| y.cmp(&x));
+
+            let num_times = times.len() as f64;
+
+            let average = times.iter().sum::<u32>() as f64 / num_times;
+
+            let one_takes = f64::max(1., num_times / 100.);
+            let one_percent = times.iter().take(one_takes as usize).sum::<u32>() as f64 / one_takes;
+
+            let tenth_takes = f64::max(1., num_times / 1000.);
+            let tenth_percent =
+                times.iter().take(tenth_takes as usize).sum::<u32>() as f64 / tenth_takes;
+
+            self.cached_times = FrameTimes {
+                avg_frame_time: average,
+                one_percent_frame_time: one_percent,
+                tenth_percent_frame_time: tenth_percent,
+            };
+
+            self.accumulator = 0.;
+        }
+    }
+
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen::prelude::wasm_bindgen)]
+    pub fn current_data(&self) -> FrameTimes {
+        self.cached_times
+    }
+
+    pub fn add_frame_time(&mut self, frame_time: u32) {
+        self.bench_data.frame_times.push(frame_time);
     }
 }
