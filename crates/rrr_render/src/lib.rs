@@ -33,10 +33,6 @@ impl Renderer {
         let frame: &mut [u8] = self.pixels.get_frame_mut();
         field::clear(frame);
 
-        // Draw the zero point of the notes.
-        // These offsets don't make much sense.
-        field::draw_line(frame, receptor_position, self.height, self.width);
-
         let offset = self.width as f32 / 2.0 - noteskin.note_width as f32 * 0.5;
 
         field::draw_receptors(

@@ -80,21 +80,6 @@ pub(crate) fn draw_notes<'a>(
     }
 }
 
-pub(crate) fn draw_line(
-    frame: &mut [u8],
-    receptor_position: ReceptorPosition,
-    _screen_height: u32,
-    screen_width: u32,
-) {
-    let color = [0x5e, 0x48, 0xe8, 0xff];
-    for (i, pixel) in frame.chunks_exact_mut(4).enumerate() {
-        let y = i as u32 / screen_width;
-        if receptor_position.0 == y {
-            pixel.copy_from_slice(&color);
-        }
-    }
-}
-
 pub(crate) fn draw_receptors(
     noteskin: &Noteskin,
     frame: &mut [u8],
