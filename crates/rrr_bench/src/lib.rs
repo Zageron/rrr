@@ -3,7 +3,7 @@
 pub struct Bencher {
     bench_data: BenchmarkData,
     previous_tick: u32,
-    accumulator: f64,
+    accumulator: u32,
     cached_times: FrameTimes,
 }
 
@@ -31,7 +31,7 @@ impl Bencher {
         Bencher {
             bench_data: BenchmarkData::default(),
             previous_tick: now,
-            accumulator: 0.,
+            accumulator: 0,
             cached_times: FrameTimes::default(),
         }
     }
@@ -41,23 +41,28 @@ impl Bencher {
         let frame_time = now - self.previous_tick;
         self.add_frame_time(frame_time);
 
-        self.accumulator += frame_time as f64 / 10.;
+        self.accumulator += frame_time;
         self.previous_tick = now.into();
 
-        if self.accumulator >= 60. {
+        if self.accumulator >= 1000 {
             let times = &mut self.bench_data.frame_times;
             times.sort_unstable_by(|x, y| y.cmp(&x));
 
-            let num_times = times.len() as f64;
+            let num_times = times.len() as u32;
 
-            let average = times.iter().sum::<u32>() as f64 / num_times;
+            let average = times.iter().sum::<u32>() as f64 / num_times as f64;
 
-            let one_takes = f64::max(1., num_times / 100.);
-            let one_percent = times.iter().take(one_takes as usize).sum::<u32>() as f64 / one_takes;
+            let one_takes = u32::max(1, num_times / 100);
+            let one_percent =
+                times.iter().take(one_takes as usize).sum::<u32>() as f64 / one_takes as f64;
 
-            let tenth_takes = f64::max(1., num_times / 1000.);
+            let tenth_takes = u32::max(1, num_times / 1000);
             let tenth_percent =
-                times.iter().take(tenth_takes as usize).sum::<u32>() as f64 / tenth_takes;
+                times.iter().take(tenth_takes as usize).sum::<u32>() as f64 / tenth_takes as f64;
+
+            log::info!("samples: {:?}", times);
+            log::info!("1% take: {:?}", one_takes);
+            log::info!(".1% take: {:?}", one_takes);
 
             self.cached_times = FrameTimes {
                 avg_frame_time: average,
@@ -65,7 +70,7 @@ impl Bencher {
                 tenth_percent_frame_time: tenth_percent,
             };
 
-            self.accumulator = 0.;
+            self.accumulator = 0;
         }
     }
 
