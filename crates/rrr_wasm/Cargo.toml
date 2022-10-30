@@ -17,14 +17,17 @@ crate-type = ["cdylib"]
 release = ["log/release_max_level_off"]
 optimize = ["log/release_max_level_warn"]
 develop = ["log/release_max_level_info"]
-default = ["develop"]
+default = ["develop", "bench"]
+bench = ["dep:rrr_bench"]
 
 [dependencies]
 anyhow = "1.0.66"
 console_error_panic_hook = "0.1.7"
 console_log = "0.2.0"
+js-sys = "0.3.60"
 log = "0.4.17"
 pixels = { git = "https://github.com/Zageron/pixels.git", branch = "main" }
+rrr_bench = { path = "../rrr_bench", optional = true }
 rrr_fetch = { path = "../rrr_fetch" }
 rrr_game = { path = "../rrr_game" }
 rrr_input = { path = "../rrr_input" }

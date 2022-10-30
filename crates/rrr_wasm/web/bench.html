@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <base href="/">
+
+    <!-- Primary Meta Tags -->
+    <title>RRR Benchmark</title>
+    <meta name="author" content="Zageron">
+    <meta name="description" content="Benchmark to determine the number of notes per second the note field supports.">
+    <meta name="theme-color" content="#FF0000">
+    <link rel="icon" type="image/x-icon" href="favicon.ico" />
+
+    <!-- Styling -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="style.css" rel="stylesheet">
+
+    <!-- Script -->
+    <script type="module" src="bench.js"></script>
+
+</head>
+
+<body class="root flex">
+    <div class="benchmark">
+        <label>Average:</label>
+        <p id="avg_frame_time">0.00ms</p>
+
+        <label>1% Minimum:</label>
+        <p id="one_percent_frame_time">0.00ms</p>
+
+        <label>.1% Minimum:</label>
+        <p id="tenth_percent_frame_time">0.00ms</p>
+    </div>
+</body>
+
+</html>

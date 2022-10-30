@@ -71,6 +71,7 @@ impl<T: TimeTrait> RustRustRevolutionBuilder<BuildHeadless, T> {
             previous_instant: T::now(),
             current_instant: T::now(),
             play_state,
+            delta: 0.,
         }
     }
 }
@@ -113,6 +114,7 @@ impl<T: TimeTrait> RustRustRevolutionBuilder<BuildRendered, T> {
             previous_instant: T::now(),
             current_instant: T::now(),
             play_state,
+            delta: 0.,
         }
     }
 }

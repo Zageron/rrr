@@ -1,7 +1,7 @@
-#![forbid(unsafe_code)]
 #![allow(unused)]
 
 use anyhow::{self, Result};
+use js_sys::Function;
 pub use rrr_fetch::platform::Fetcher;
 use rrr_fetch::{Chart, FetchProgress};
 use rrr_game::{
@@ -26,23 +26,22 @@ use winit::{
     window::{self, Window, WindowBuilder},
 };
 
+#[cfg(feature = "bench")]
+use rrr_bench::{Bencher, BenchmarkData};
+
 #[wasm_bindgen(inspectable)]
 #[derive(Debug)]
 pub struct RRR {
-    #[wasm_bindgen(skip)]
-    pub rrr: RustRustRevolution<Rendered, Time>,
-
-    #[wasm_bindgen(skip)]
-    pub window: Window,
-
-    #[wasm_bindgen(skip)]
-    pub event_loop: EventLoop<()>,
+    rrr: RustRustRevolution<Rendered, Time>,
+    window: Window,
+    event_loop: EventLoop<()>,
 }
 
 #[allow(deprecated)]
 #[wasm_bindgen]
 impl RRR {
-    pub fn run_once(mut self) {
+    pub fn run_once(mut self, ui_callback: &js_sys::Function) {
+        let ui_callback = ui_callback.clone();
         wasm_bindgen_futures::spawn_local(async move {
             self.event_loop.run(move |in_event, _, control_flow| {
                 control_flow.set_poll();
@@ -75,6 +74,7 @@ impl RRR {
 
                     winit::event::Event::RedrawEventsCleared => {
                         self.rrr.finish();
+                        ui_callback.call0(&JsValue::null());
                     }
 
                     winit::event::Event::LoopDestroyed => {}
@@ -170,6 +170,13 @@ impl RRRBuilder {
     #[wasm_bindgen]
     pub fn with_canvas(self, canvas: Option<HtmlCanvasElement>) -> RRRBuilder {
         Self { canvas }
+    }
+
+    #[wasm_bindgen]
+    pub fn with_benchmarking(self) -> RRRBuilder {
+        Self {
+            canvas: self.canvas,
+        }
     }
 
     #[wasm_bindgen]
