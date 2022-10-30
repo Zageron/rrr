@@ -1,7 +1,7 @@
 use anyhow::Result;
 use pixels::{
     raw_window_handle::{HasRawDisplayHandle, HasRawWindowHandle},
-    wgpu::Color,
+    wgpu::{Color, RequestAdapterOptions},
     Pixels, PixelsBuilder, SurfaceTexture,
 };
 use rrr_chart::RuntimeNote;
@@ -100,6 +100,10 @@ impl<'win, W: HasRawWindowHandle + HasRawDisplayHandle> RendererBuilder<'win, W>
         let surface_texture = SurfaceTexture::new(self.width, self.height, self.window);
         let pixels = PixelsBuilder::new(self.width, self.height, surface_texture)
             .clear_color(self.color)
+            .request_adapter_options(RequestAdapterOptions {
+                power_preference: pixels::wgpu::PowerPreference::HighPerformance,
+                ..RequestAdapterOptions::default()
+            })
             .build_async()
             .await?;
 
