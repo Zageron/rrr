@@ -1,7 +1,7 @@
 #![allow(unused)]
 
 use anyhow::{self, Result};
-use js_sys::Function;
+use js_sys::{Function, Uint8Array};
 pub use rrr_fetch::platform::Fetcher;
 use rrr_fetch::{Chart, FetchProgress};
 use rrr_game::{
@@ -36,6 +36,8 @@ pub struct RRR {
     window: Window,
     event_loop: EventLoop<()>,
 }
+
+//
 
 #[allow(deprecated)]
 #[wasm_bindgen]
@@ -180,7 +182,7 @@ impl RRRBuilder {
     }
 
     #[wasm_bindgen]
-    pub async fn build(self) -> Result<RRR, JsValue> {
+    pub async fn build(self, raw_swf_data: Uint8Array) -> Result<RRR, JsValue> {
         let canv = self.canvas.clone().unwrap();
 
         let event_loop = EventLoop::new();
@@ -213,16 +215,7 @@ impl RRRBuilder {
             return Err("Bad canvas.".to_owned().into());
         };
 
-        let url = format!(
-            "https://www.flashflashrevolution.com/game/r3/r3-songLoad.php?id={}&mode=2&type=ChartFFR_music",
-            "f9b50c8a00667e711ff63ed2cd944f54"
-        );
-
-        let mut fetcher = Fetcher::new(url).await;
-
-        assert!(fetcher.is_ok(), "{:?}", fetcher.err());
-
-        let data = fetcher?.fetch().await;
+        let data = raw_swf_data.to_vec();
 
         let record_press = RecordPressBuilder::from_swf(data);
         let record = record_press.press();
