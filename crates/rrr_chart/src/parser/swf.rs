@@ -200,14 +200,12 @@ impl SwfParser<Parsing> {
                         }
 
                         let items_to_pop = if let Some(Value::Int(length)) = value_stack.pop() {
-                            log::info!("Number of items to create init for {}", length);
                             length
                         } else {
                             anyhow::bail!("There was not an int on the end so you broke it.")
                         };
 
                         if value_stack.len() < items_to_pop as usize {
-                            log::info!("We are done.");
                             // We're done!
                             break; // Probably
                         }
