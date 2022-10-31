@@ -11,6 +11,7 @@ async function main() {
     canvas.setAttribute('class', 'canvas');
     canvas.width = 768;
     canvas.height = 512;
+    canvas.focus();
 
     const params = new URLSearchParams(window.location.search);
     const song_id = params.get("song_id");
