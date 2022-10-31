@@ -5,9 +5,11 @@ use js_sys::{Function, Uint8Array};
 pub use rrr_fetch::platform::Fetcher;
 use rrr_fetch::{Chart, FetchProgress};
 use rrr_game::{
+    builder::BuildRendered,
+    builder::RustRustRevolutionBuilder,
     hit_action,
     prelude::{Play, RuntimeChart, SongID, Turntable},
-    Rendered, RustRustRevolution, RustRustRevolutionBuilder,
+    Rendered, RustRustRevolution,
 };
 use rrr_input::KeyCode;
 use rrr_record::{record::Record, RecordPressBuilder};
@@ -32,7 +34,7 @@ use rrr_bench::{Bencher, BenchmarkData};
 #[wasm_bindgen(inspectable)]
 #[derive(Debug)]
 pub struct RRR {
-    rrr: RustRustRevolution<Rendered, Time>,
+    rrr_builder: RustRustRevolutionBuilder<BuildRendered, Time>,
     window: Window,
     event_loop: EventLoop<()>,
 }
@@ -43,6 +45,8 @@ pub struct RRR {
 #[wasm_bindgen]
 impl RRR {
     pub fn run_once(mut self, ui_callback: &js_sys::Function) {
+        let mut rrr = self.rrr_builder.build();
+
         let ui_callback = ui_callback.clone();
         wasm_bindgen_futures::spawn_local(async move {
             self.event_loop.run(move |in_event, _, control_flow| {
@@ -63,11 +67,11 @@ impl RRR {
                     winit::event::Event::Resumed => {}
 
                     winit::event::Event::MainEventsCleared => {
-                        self.rrr.update();
-                        self.rrr.draw();
+                        rrr.update();
+                        rrr.draw();
                         self.window.set_inner_size(PhysicalSize {
-                            width: self.rrr.width(),
-                            height: self.rrr.height(),
+                            width: rrr.width(),
+                            height: rrr.height(),
                         }); // Is this needed?
                         self.window.request_redraw();
                     }
@@ -75,7 +79,7 @@ impl RRR {
                     winit::event::Event::RedrawRequested(_) => {}
 
                     winit::event::Event::RedrawEventsCleared => {
-                        self.rrr.finish();
+                        rrr.finish();
                         ui_callback.call0(&JsValue::null());
                     }
 
@@ -103,7 +107,7 @@ impl RRR {
                         } => {
                             if let winit::event::ElementState::Pressed = input.state {
                                 if let Some(virtual_keycode) = input.virtual_keycode {
-                                    self.rrr.hit(hit_action::Builder::with_key_code(
+                                    rrr.hit(hit_action::Builder::with_key_code(
                                         virtual_key_code_to_key_code(virtual_keycode),
                                     ));
                                 }
@@ -223,11 +227,10 @@ impl RRRBuilder {
         let turntable = Turntable::load(record.unwrap());
         let play = Play::new(turntable);
 
-        let mut rrr =
-            RustRustRevolutionBuilder::with_renderer(renderer).build(play.start_with_audio());
+        let mut rrr_builder = RustRustRevolutionBuilder::with_play(play).with_renderer(renderer);
 
         Ok(RRR {
-            rrr,
+            rrr_builder,
             window,
             event_loop,
         })

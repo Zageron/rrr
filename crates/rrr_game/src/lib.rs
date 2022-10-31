@@ -1,9 +1,8 @@
-mod builder;
+pub mod builder;
 mod field;
 pub mod hit_action;
 
 use anyhow::Result;
-pub use builder::RustRustRevolutionBuilder;
 use rrr_core::{prelude::CoreSettings, Active, Play};
 use rrr_noteskin::Noteskin;
 use rrr_render::Renderer;

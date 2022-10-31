@@ -7,8 +7,8 @@ use crossterm::{
 use rrr_config::Config;
 use rrr_fetch::{platform::Fetcher, FetchProgress};
 use rrr_game::{
+    builder::RustRustRevolutionBuilder,
     prelude::{Play, Turntable},
-    RustRustRevolutionBuilder,
 };
 use rrr_record::RecordPressBuilder;
 use rrr_window::{
@@ -174,8 +174,9 @@ pub fn init() -> Result<()> {
                 let turntable = Turntable::load(record.unwrap());
                 let play = Play::new(turntable);
 
-                let mut rrr = RustRustRevolutionBuilder::with_renderer(renderer)
-                    .build(play.start_with_audio());
+                let mut rrr = RustRustRevolutionBuilder::with_play(play)
+                    .with_renderer(renderer)
+                    .build();
                 window.run_once(&mut rrr);
             }
 
