@@ -222,7 +222,7 @@ impl SwfParser<Parsing> {
 
                         let timestamp = match items_to_pop > 3 {
                             true => parse_timestamp(&mut value_stack)?,
-                            false => beat_position / 30 * 1000,
+                            false => ((beat_position as f64 / 30.) * 1000.) as u32,
                         };
 
                         beat_box.push(RuntimeNote {
