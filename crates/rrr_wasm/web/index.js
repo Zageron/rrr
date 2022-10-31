@@ -1,5 +1,7 @@
 import init, { initialize, RRRBuilder, Fetcher } from "./bin/rrr_wasm.js";
 
+var rrr = null;
+
 async function main() {
     await init();
 
@@ -26,8 +28,16 @@ async function main() {
     // Possible fetch progress reference https://javascript.info/fetch-progress
     var fetcher = await Fetcher.new(`https://www.flashflashrevolution.com/game/r3/r3-songLoad.php?id=${song.previewhash}&mode=2&type=ChartFFR_music`);
     var value = await fetcher.fetch_js();
-    var rrr = await new RRRBuilder().with_canvas(canvas).build(value);
-    rrr.run_once();
+    rrr = await new RRRBuilder().with_canvas(canvas).build(value);
+    canvas.addEventListener("keyup", key_press);
+}
+
+function key_press(event) {
+    console.log(event);
+    if (event.code == "Space") {
+        rrr.run_once();
+    }
+    canvas.removeEventListener("keyup", key_press);
 }
 
 main();
