@@ -15,4 +15,4 @@ version = "0.3.60"
 features = ["Window", "Performance"]
 
 [target.'cfg(target_arch = "wasm32")'.dev-dependencies]
-wasm-bindgen-test = "0.3.33"
+wasm-bindgen-test = "0.3"

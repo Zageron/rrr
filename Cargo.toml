@@ -30,18 +30,18 @@ tui = ["rrr_tui"]
 window = ["rrr_window"]
 
 [dependencies]
-anyhow = "1.0.66"
-log = "0.4.17"
-clap = { version = "4.0.19", features = ["derive"] }
-clap_complete = "4.0.3"
-futures = "0.3.25"
+anyhow = "1.0"
+log = "0.4"
+clap = { version = "4.0", features = ["derive"] }
+clap_complete = "4.0"
+futures = "0.3"
 rrr_config = { path = "crates/rrr_config" }
 rrr_fetch = { path = "crates/rrr_fetch" }
 rrr_game = { path = "crates/rrr_game" }
 rrr_record = { path = "crates/rrr_record" }
 rrr_tui = { path = "crates/rrr_tui", optional = true }
 rrr_window = { path = "crates/rrr_window", optional = true }
-simple_logger = "4.0.0"
+simple_logger = "4.0"
 
 [profile.release]
 opt-level = 3

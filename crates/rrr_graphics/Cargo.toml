@@ -11,5 +11,5 @@ publish = false
 rust-version = "1.66.0"
 
 [dependencies]
-image = { version = "0.24.4", default-features = false, features = ["png"] }
+image = { version = "0.24", default-features = false, features = ["png"] }
 rrr_types = { path = "../rrr_types" }

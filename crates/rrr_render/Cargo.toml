@@ -14,7 +14,7 @@ rust-version = "1.66.0"
 crate-type = ["lib"]
 
 [dependencies]
-anyhow = "1.0.66"
+anyhow = "1.0"
 pixels = { git = "https://github.com/Zageron/pixels.git", branch = "main" }
 rrr_chart = { path = "../rrr_chart" }
 rrr_core = { path = "../rrr_core" }
