@@ -11,4 +11,4 @@ publish = false
 rust-version = "1.66.0"
 
 [dependencies]
-num-traits = "0.2.15"
+num-traits = "0.2"

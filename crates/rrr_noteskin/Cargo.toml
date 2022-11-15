@@ -11,8 +11,8 @@ publish = false
 rust-version = "1.66.0"
 
 [dependencies]
-anyhow = "1.0.66"
-log = { version = "0.4.17" }
+anyhow = "1.0"
+log = { version = "0.4" }
 rrr_chart = { path = "../rrr_chart" }
 rrr_graphics = { path = "../rrr_graphics" }
-strum = { version = "0.24.1", features = ["derive"] }
+strum = { version = "0.24", features = ["derive"] }
