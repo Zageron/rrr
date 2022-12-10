@@ -3,8 +3,8 @@
         "davidanson.vscode-markdownlint",
         "mikestead.dotenv",
         "redhat.vscode-yaml",
-        "swellaby.rust-pack",
         "yzhang.markdown-all-in-one",
-        "zerotaskx.rust-extension-pack"
+        "zerotaskx.rust-extension-pack",
+        "serayuzgur.crates"
     ]
 }
