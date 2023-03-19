@@ -144,4 +144,4 @@ jobs:
       - name: Deploy to GitHub Pages
         if: ${{ !env.ACT }}
         id: deployment
-        uses: actions/deploy-pages@v1
+        uses: actions/deploy-pages@v2
