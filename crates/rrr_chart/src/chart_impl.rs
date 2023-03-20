@@ -5,7 +5,6 @@ use super::note::{NoteRow, RuntimeNote};
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(Clone, Default, Eq, PartialEq, Ord, PartialOrd, Hash, Debug)]
-/// A runtime efficient representation of a chart used by an [RRR](crate::RRR) instance.
 pub struct RuntimeChart {
     pub notes: Vec<RuntimeNote>,
 }

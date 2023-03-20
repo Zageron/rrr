@@ -90,7 +90,6 @@ impl Note {
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(Clone, Eq, PartialEq, Ord, PartialOrd, Hash, Debug, Default)]
-/// Stores the [notes](Note) that belong to a single row in a [beat](Beat).
 pub struct NoteRow {
     offset: u32,
     // TODO: This should be [Note; N] but const generics aren't stable yet.

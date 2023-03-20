@@ -333,7 +333,7 @@ fn parse_push_action<'a>(
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::{NoteColor, RuntimeChart};
+    use crate::NoteColor;
 
     use super::SwfParser;
     use anyhow::{self, Result};
