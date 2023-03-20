@@ -2,8 +2,8 @@ use anyhow::Result;
 use rrr_config::Config;
 use rrr_fetch::{platform::Fetcher, FetchProgress};
 use rrr_game::{
+    builder::RustRustRevolutionBuilder,
     prelude::{rrr_render, Play, Turntable},
-    RustRustRevolutionBuilder,
 };
 use rrr_record::RecordPressBuilder;
 use rrr_window::{prelude::EventLoopBuilder, Window};
@@ -17,7 +17,7 @@ pub fn main() -> Result<()> {
 
     let url = format!(
             "https://www.flashflashrevolution.com/game/r3/r3-songLoad.php?id={}&mode=2&type=ChartFFR_music",
-            "f9b50c8a00667e711ff63ed2cd944f54"
+            "a054ce01d88f3cba3bc98f70d71b3278"
         );
 
     let mut fetcher = Fetcher::new(url);
@@ -49,16 +49,16 @@ pub fn main() -> Result<()> {
     let config = Config::default();
     let mut event_loop = EventLoopBuilder::new().build();
     let mut window = Window::new(config, &mut event_loop)?;
-    let renderer = futures::executor::block_on(async {
-        rrr_render::RendererBuilder::new(config.width, config.height, &window.window)
-            .build()
-            .await
-    })?;
+    let renderer = futures::executor::block_on(
+        rrr_render::RendererBuilder::new(config.width, config.height, &window.window).build(),
+    )?;
 
     let turntable = Turntable::load(record.unwrap());
     let play = Play::new(turntable);
 
-    let mut rrr = RustRustRevolutionBuilder::with_renderer(renderer).build(play.start_with_audio());
+    let mut rrr = RustRustRevolutionBuilder::with_play(play)
+        .with_renderer(renderer)
+        .build();
     window.run_once(&mut rrr);
     Ok(())
 }
