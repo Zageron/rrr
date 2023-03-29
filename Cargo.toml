@@ -32,7 +32,7 @@ window = ["rrr_window"]
 [dependencies]
 anyhow = "1.0"
 log = "0.4"
-clap = { version = "4.1", features = ["derive"] }
+clap = { version = "4.2", features = ["derive"] }
 clap_complete = "4.1"
 futures = "0.3"
 rrr_config = { path = "crates/rrr_config" }
