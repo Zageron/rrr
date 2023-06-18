@@ -22,7 +22,7 @@ anyhow = "1.0"
 log = "0.4"
 rrr_types = { path = "../rrr_types" }
 serde = { version = "1.0", features = ["derive"] }
-strum = { version = "0.24", features = ["derive"] }
+strum = { version = "0.25", features = ["derive"] }
 swf = { version = "0.2", optional = true }
 thiserror = "1.0"
 
