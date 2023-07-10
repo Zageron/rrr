@@ -66,7 +66,7 @@ jobs:
 
       - name: Upload Artifact
         if: ${{ !env.ACT }}
-        uses: actions/upload-pages-artifact@v1
+        uses: actions/upload-pages-artifact@v2
         with:
           path: ./crates/rrr_wasm/web
 
