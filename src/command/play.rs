@@ -24,8 +24,8 @@ impl Args {
         }
 
         let url = format!(
-            "https://www.flashflashrevolution.com/game/r3/r3-songLoad.php?id={}&mode=2&type=ChartFFR_music",
-            "f9b50c8a00667e711ff63ed2cd944f54"
+            "https://www.flashflashrevolution.com/game/r3/r3-songLoad.php?id={}&type=ChartFFR_music",
+            "8e058c682f875b36fac6fa065c33fd88"
         );
 
         let mut fetcher = Fetcher::new(url);

@@ -62,7 +62,7 @@ mod tests {
     #[test]
     fn test_fetch() {
         let url = format!(
-            "https://www.flashflashrevolution.com/game/r3/r3-songLoad.php?id={}&mode=2&type=ChartFFR_music",
+            "https://www.flashflashrevolution.com/game/r3/r3-songLoad.php?id={}&type=ChartFFR_music",
             "893d743a36543581e0dbbc5b637c7e8f"
         );
 

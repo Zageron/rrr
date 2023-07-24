@@ -19,7 +19,10 @@
                     "kind": "bin"
                 }
             },
-            "args": [],
+            "args": [
+                "play",
+                "1"
+            ],
             "cwd": "${workspaceFolder}"
         },
         {

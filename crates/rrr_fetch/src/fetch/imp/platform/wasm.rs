@@ -93,7 +93,7 @@ impl Fetcher {
 //         if let Ok(result) = test_result {
 //             if let Some(payload) = result {
 //                 assert!(!payload.songs.is_empty());
-//                 let song_result: Result<Option<Vec<u8>>, JsValue> = fetch_data(format!("https://www.flashflashrevolution.com/game/r3/r3-songLoad.php?id={}&mode=2&type=ChartFFR_music", payload.songs[0].previewhash).to_string()).await;
+//                 let song_result: Result<Option<Vec<u8>>, JsValue> = fetch_data(format!("https://www.flashflashrevolution.com/game/r3/r3-songLoad.php?id={}&type=ChartFFR_music", payload.songs[0].hash_load).to_string()).await;
 //                 assert!(song_result.is_ok());
 //                 if let Ok(song) = song_result {
 //                     assert!(song.is_some());

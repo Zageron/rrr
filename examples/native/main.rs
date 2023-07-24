@@ -16,9 +16,9 @@ pub fn main() -> Result<()> {
     }
 
     let url = format!(
-            "https://www.flashflashrevolution.com/game/r3/r3-songLoad.php?id={}&mode=2&type=ChartFFR_music",
-            "a054ce01d88f3cba3bc98f70d71b3278"
-        );
+        "https://www.flashflashrevolution.com/game/r3/r3-songLoad.php?id={}&type=ChartFFR_music",
+        "a054ce01d88f3cba3bc98f70d71b3278"
+    );
 
     let mut fetcher = Fetcher::new(url);
 
