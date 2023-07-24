@@ -12,13 +12,13 @@ use symphonia::{
         io::{MediaSourceStream, MediaSourceStreamOptions},
         units::TimeStamp,
     },
-    default::{codecs::Mp3Decoder, formats::Mp3Reader},
+    default::{codecs::MpaDecoder, formats::MpaReader},
 };
 
 pub struct AudioPlayer {
     output: Option<Box<dyn AudioOutput>>,
-    decoder: Box<Mp3Decoder>,
-    reader: Box<Mp3Reader>,
+    decoder: Box<MpaDecoder>,
+    reader: Box<MpaReader>,
     _track_id: u32,
     remaining_samples: usize,
 }
@@ -40,9 +40,9 @@ impl AudioPlayer {
             Box::new(Cursor::new(mp3.to_owned())),
             MediaSourceStreamOptions::default(),
         );
-        let reader = Box::new(Mp3Reader::try_new(mss, &FormatOptions::default())?);
+        let reader = Box::new(MpaReader::try_new(mss, &FormatOptions::default())?);
         let track = reader.default_track().context("no tracks present")?;
-        let decoder = Box::new(Mp3Decoder::try_new(
+        let decoder = Box::new(MpaDecoder::try_new(
             &track.codec_params,
             &DecoderOptions::default(),
         )?);

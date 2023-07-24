@@ -15,7 +15,7 @@ crate-type = ["lib"]
 
 [dependencies]
 anyhow = "1.0"
-pixels = { git = "https://github.com/Zageron/pixels.git", branch = "main" }
+pixels = "0.13"
 rrr_chart = { path = "../rrr_chart" }
 rrr_core = { path = "../rrr_core" }
 rrr_graphics = { path = "../rrr_graphics" }

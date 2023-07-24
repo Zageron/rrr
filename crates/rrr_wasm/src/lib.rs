@@ -153,6 +153,17 @@ impl RRR {
                         } => {}
                         winit::event::WindowEvent::ThemeChanged(_) => {}
                         winit::event::WindowEvent::Occluded(_) => {}
+                        winit::event::WindowEvent::TouchpadMagnify {
+                            device_id,
+                            delta,
+                            phase,
+                        } => {}
+                        winit::event::WindowEvent::SmartMagnify { device_id } => {}
+                        winit::event::WindowEvent::TouchpadRotate {
+                            device_id,
+                            delta,
+                            phase,
+                        } => {}
                     },
                 }
             });

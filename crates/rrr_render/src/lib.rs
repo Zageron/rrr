@@ -30,7 +30,7 @@ impl Renderer {
         gap: u8,
         ms_offset: i32,
     ) -> Result<()> {
-        let frame: &mut [u8] = self.pixels.get_frame_mut();
+        let frame: &mut [u8] = self.pixels.frame_mut();
         field::clear(frame);
 
         let offset = self.width as f32 / 2.0 - noteskin.note_width as f32 * 0.5;

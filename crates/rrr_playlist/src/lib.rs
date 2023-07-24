@@ -12,32 +12,22 @@ use std::collections::HashMap;
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Song {
+    pub level: i64,
     pub genre: i64,
     pub name: String,
+    pub author: String,
+    pub author_url: String,
+    pub stepauthor: String,
     pub difficulty: i64,
     pub style: String,
     pub time: String,
-    pub level: i64,
     pub order: i64,
-    pub arrows: i64,
-    pub playhash: String,
-    pub previewhash: String,
-    pub prerelease: bool,
-    pub releasedate: i64,
-    pub author: String,
-    pub stepauthor: String,
-
-    #[serde(rename = "authorURL")]
-    pub author_url: String,
-
-    #[serde(rename = "stepauthorURL")]
-    pub stepauthor_url: String,
-    pub min_nps: i64,
-    pub max_nps: i64,
-    pub nps_data: String,
-    pub song_rating: Option<f64>,
-    pub credits: Option<i64>,
-    pub price: Option<i64>,
+    pub note_count: i64,
+    pub nps_min: i64,
+    pub nps_max: i64,
+    pub data_nps: String,
+    pub hash_load: String,
+    pub swf_end_delay: i64,
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]

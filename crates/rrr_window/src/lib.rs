@@ -148,6 +148,17 @@ impl<'e> Window<'e> {
                     } => {}
                     winit::event::WindowEvent::ThemeChanged(_) => {}
                     winit::event::WindowEvent::Occluded(_) => {}
+                    winit::event::WindowEvent::TouchpadMagnify {
+                        device_id: _,
+                        delta: _,
+                        phase: _,
+                    } => {}
+                    winit::event::WindowEvent::SmartMagnify { device_id: _ } => {}
+                    winit::event::WindowEvent::TouchpadRotate {
+                        device_id: _,
+                        delta: _,
+                        phase: _,
+                    } => {}
                 },
             }
         });

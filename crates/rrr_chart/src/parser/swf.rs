@@ -339,11 +339,6 @@ mod tests {
     use anyhow::{self, Result};
 
     fn parse_chart(raw_swf: &[u8]) -> Result<Parsed, swf::error::Error> {
-        if simple_logger::init().is_err() {
-            println!("error");
-            assert!(false)
-        }
-
         let mut vec = Vec::<u8>::new();
         vec.extend_from_slice(raw_swf);
 
