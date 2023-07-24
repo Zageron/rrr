@@ -63,7 +63,7 @@ mod tests {
     fn test_fetch() {
         let url = format!(
             "https://www.flashflashrevolution.com/game/r3/r3-songLoad.php?id={}&type=ChartFFR_music",
-            "893d743a36543581e0dbbc5b637c7e8f"
+            "8e058c682f875b36fac6fa065c33fd88"
         );
 
         let mut fetcher = Fetcher::new(url);
