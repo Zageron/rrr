@@ -26,11 +26,11 @@ jobs:
           override: true
           profile: minimal
           target: wasm32-unknown-unknown
-          toolchain: nightly-2022-10-15
+          toolchain: nightly-2023-07-22
 
       - uses: davidB/rust-cargo-make@v1
         with:
-          version: "0.36.1"
+          version: "0.36.12"
 
       - name: Update Linux Dependencies
         run: sudo apt-get update
