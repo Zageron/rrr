@@ -21,4 +21,4 @@ features = ["v4", "fast-rng", "macro-diagnostics"]
 app_dirs = { package = "app_dirs2", version = "2.5" }
 
 [target.'cfg(target_arch = "wasm32")'.dependencies]
-gloo-storage = "0.2"
+gloo-storage = "0.3"
