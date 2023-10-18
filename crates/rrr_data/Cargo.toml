@@ -14,7 +14,7 @@ rust-version = "1.66.0"
 serde = { version = "1.0", features = ["derive"] }
 
 [dependencies.uuid]
-version = "1.4"
+version = "1.5"
 features = ["v4", "fast-rng", "macro-diagnostics"]
 
 [target.'cfg(not(target_arch = "wasm32"))'.dependencies]
