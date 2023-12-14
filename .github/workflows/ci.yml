@@ -123,7 +123,7 @@ jobs:
         working-directory: ${{ github.workspace }}
         run: cargo build --release --bins
 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.os }}-${{ matrix.target }}-executable
           path: ./target/release/rrr*
