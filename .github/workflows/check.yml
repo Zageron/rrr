@@ -41,7 +41,7 @@ jobs:
         if: ${{ runner.os == 'Linux' }}
 
       - name: ⚡ Cache
-        uses: Swatinem/rust-cache@v2.7.2
+        uses: Swatinem/rust-cache@v2.7.3
         if: ${{ !env.ACT }}
 
       - name: Check
