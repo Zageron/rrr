@@ -15,4 +15,4 @@ anyhow = "1.0"
 log = { version = "0.4" }
 rrr_chart = { path = "../rrr_chart" }
 rrr_graphics = { path = "../rrr_graphics" }
-strum = { version = "0.25", features = ["derive"] }
+strum = { version = "0.26", features = ["derive"] }
