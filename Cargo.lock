@@ -3655,6 +3655,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "web-time"
+version = "1.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "5a6580f308b1fad9207618087a65c04e7a10bc77e02c8e84e9b00dd4b12fa0bb"
+dependencies = [
+ "js-sys",
+ "wasm-bindgen",
+]
+
+[[package]]
 name = "webpki-roots"
 version = "0.25.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -4177,17 +4187,18 @@ dependencies = [
  "wasm-bindgen",
  "wasm-bindgen-futures",
  "web-sys",
- "web-time",
+ "web-time 0.2.3",
  "windows-sys 0.48.0",
  "xkbcommon-dl",
 ]
 
 [[package]]
 name = "winit_input_helper"
-version = "0.15.0"
+version = "0.16.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3e9a2781262142b6f19c4af19eb39b5eb402a4e6daf9b5e484b2b2bc5461c8f1"
+checksum = "d9ac4cbf1e5535cb289b0aad55e6610665dba6415dcfaf6ba9ee492f7b302204"
 dependencies = [
+ "web-time 1.1.0",
  "winit 0.29.3",
 ]
 
