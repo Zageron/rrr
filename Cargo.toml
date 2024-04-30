@@ -41,7 +41,7 @@ rrr_game = { path = "crates/rrr_game" }
 rrr_record = { path = "crates/rrr_record" }
 rrr_tui = { path = "crates/rrr_tui", optional = true }
 rrr_window = { path = "crates/rrr_window", optional = true }
-simple_logger = "4.3"
+simple_logger = "5.0"
 
 [profile.release]
 opt-level = 3
