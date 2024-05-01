@@ -11,7 +11,7 @@ publish = false
 rust-version = "1.66.0"
 
 [dependencies]
-anyhow = "1.0"
+anyhow = "1.0.82"
 log = "0.4"
 rrr_playlist = { path = "../rrr_playlist" }
 rrr_types = { path = "../rrr_types" }

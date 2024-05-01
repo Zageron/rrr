@@ -18,7 +18,7 @@ sm = []
 
 
 [dependencies]
-anyhow = "1.0"
+anyhow = "1.0.82"
 log = "0.4"
 rrr_types = { path = "../rrr_types" }
 serde = { version = "1.0", features = ["derive"] }
