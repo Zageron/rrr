@@ -11,7 +11,7 @@ publish = false
 rust-version = "1.66.0"
 
 [dependencies]
-anyhow = "1.0"
+anyhow = "1.0.82"
 crossterm = "0.27"
 futures = "0.3"
 rrr_config = { path = "../rrr_config" }

@@ -13,7 +13,7 @@ rust-version = "1.66.0"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-anyhow = "1.0"
+anyhow = "1.0.82"
 dasp = { git = "https://github.com/RustAudio/dasp", rev = "6b15274b471835e586089e54228e54601f92d391", features = [
     "interpolate",
     "interpolate-linear",
