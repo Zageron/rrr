@@ -31,7 +31,7 @@ window = ["rrr_window"]
 
 [dependencies]
 anyhow = "1.0.82"
-log = "0.4"
+log = "0.4.21"
 clap = { version = "4.4", features = ["derive"] }
 clap_complete = "4.4"
 futures = "0.3"

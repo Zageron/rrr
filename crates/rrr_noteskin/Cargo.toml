@@ -12,7 +12,7 @@ rust-version = "1.66.0"
 
 [dependencies]
 anyhow = "1.0.82"
-log = { version = "0.4" }
+log = { version = "0.4.21" }
 rrr_chart = { path = "../rrr_chart" }
 rrr_graphics = { path = "../rrr_graphics" }
 strum = { version = "0.26", features = ["derive"] }

@@ -13,7 +13,7 @@ rust-version = "1.66.0"
 [dependencies]
 anyhow = "1.0.82"
 btreemultimap = "0.1.1"
-log = "0.4"
+log = "0.4.21"
 rrr_audio = { path = "../rrr_audio" }
 rrr_chart = { path = "../rrr_chart" }
 rrr_record = { path = "../rrr_record" }
