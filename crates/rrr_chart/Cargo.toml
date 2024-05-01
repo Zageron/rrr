@@ -19,7 +19,7 @@ sm = []
 
 [dependencies]
 anyhow = "1.0.82"
-log = "0.4"
+log = "0.4.21"
 rrr_types = { path = "../rrr_types" }
 serde = { version = "1.0", features = ["derive"] }
 strum = { version = "0.26", features = ["derive"] }

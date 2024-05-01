@@ -21,7 +21,7 @@ release = ["log/release_max_level_off", "rrr_game/release"]
 
 [dependencies]
 anyhow = "1.0.82"
-log = "0.4"
+log = "0.4.21"
 rrr_config = { path = "../rrr_config" }
 rrr_game = { path = "../rrr_game" }
 rrr_input = { path = "../rrr_input" }

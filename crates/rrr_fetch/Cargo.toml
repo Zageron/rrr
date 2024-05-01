@@ -12,7 +12,7 @@ rust-version = "1.66.0"
 
 [dependencies]
 anyhow = "1.0.82"
-log = "0.4"
+log = "0.4.21"
 rrr_playlist = { path = "../rrr_playlist" }
 rrr_types = { path = "../rrr_types" }
 serde = { version = "1.0", features = ["derive"] }
