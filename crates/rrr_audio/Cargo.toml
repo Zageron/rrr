@@ -21,7 +21,7 @@ dasp = { git = "https://github.com/RustAudio/dasp", rev = "6b15274b471835e586089
 ] }
 log = "0.4.21"
 rb = "0.4.1"
-symphonia = { version = "0.5", default-features = false, features = ["mp3"] }
+symphonia = { version = "0.5.4", default-features = false, features = ["mp3"] }
 
 [target.'cfg(not(all(target_arch = "wasm32", target_os = "unknown")))'.dependencies]
 cpal = "0.14"
