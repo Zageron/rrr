@@ -24,7 +24,7 @@ rrr_types = { path = "../rrr_types" }
 serde = { version = "1.0.200", features = ["derive"] }
 strum = { version = "0.26.2", features = ["derive"] }
 swf = { version = "0.2", optional = true }
-thiserror = "1.0"
+thiserror = "1.0.59"
 
 
 [dev-dependencies]
