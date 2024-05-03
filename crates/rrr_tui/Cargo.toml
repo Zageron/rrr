@@ -13,7 +13,7 @@ rust-version = "1.66.0"
 [dependencies]
 anyhow = "1.0.82"
 crossterm = "0.27"
-futures = "0.3"
+futures = "0.3.30"
 rrr_config = { path = "../rrr_config" }
 rrr_fetch = { path = "../rrr_fetch" }
 rrr_game = { path = "../rrr_game" }
