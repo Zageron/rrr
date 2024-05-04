@@ -33,7 +33,7 @@ window = ["rrr_window"]
 anyhow = "1.0.82"
 log = "0.4.21"
 clap = { version = "4.4", features = ["derive"] }
-clap_complete = "4.4"
+clap_complete = "4.5.2"
 futures = "0.3.30"
 rrr_config = { path = "crates/rrr_config" }
 rrr_fetch = { path = "crates/rrr_fetch" }
