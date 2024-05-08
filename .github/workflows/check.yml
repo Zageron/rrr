@@ -30,7 +30,7 @@ jobs:
 
       - uses: davidB/rust-cargo-make@v1
         with:
-          version: "0.36.12"
+          version: "0.37.12"
 
       - name: Update Linux Dependencies
         run: sudo apt-get update
