@@ -33,7 +33,7 @@ jobs:
           override: true
           profile: minimal
           target: wasm32-unknown-unknown
-          toolchain: nightly-2023-07-22
+          toolchain: nightly-2024-05-05
 
       - name: Setup Pages
         if: ${{ !env.ACT }}
@@ -97,7 +97,7 @@ jobs:
           override: true
           profile: minimal
           target: ${{ matrix.target }}
-          toolchain: nightly-2023-07-22
+          toolchain: nightly-2024-05-05
 
       - uses: davidB/rust-cargo-make@v1
         with:
