@@ -13,4 +13,4 @@ rust-version = "1.66.0"
 [dependencies]
 rrr_input = { path = "../rrr_input" }
 rrr_types = { path = "../rrr_types" }
-serde = { version = "1.0.200", features = ["derive"] }
+serde = { version = "1.0.201", features = ["derive"] }

@@ -30,11 +30,11 @@ tui = ["rrr_tui"]
 window = ["rrr_window"]
 
 [dependencies]
-anyhow = "1.0.82"
-log = "0.4.21"
+anyhow = "1.0"
+log = "0.4"
 clap = { version = "4.4", features = ["derive"] }
 clap_complete = "4.4"
-futures = "0.3.30"
+futures = "0.3"
 rrr_config = { path = "crates/rrr_config" }
 rrr_fetch = { path = "crates/rrr_fetch" }
 rrr_game = { path = "crates/rrr_game" }

@@ -11,9 +11,9 @@ publish = false
 rust-version = "1.66.0"
 
 [dependencies]
-anyhow = "1.0.82"
+anyhow = "1.0"
 crossterm = "0.27"
-futures = "0.3.30"
+futures = "0.3"
 rrr_config = { path = "../rrr_config" }
 rrr_fetch = { path = "../rrr_fetch" }
 rrr_game = { path = "../rrr_game" }
@@ -21,4 +21,4 @@ rrr_record = { path = "../rrr_record" }
 rrr_render = { path = "../rrr_render" }
 rrr_window = { path = "../rrr_window" }
 tui = "0.19"
-unicode-width = "0.1.12"
+unicode-width = "0.1"

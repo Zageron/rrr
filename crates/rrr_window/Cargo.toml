@@ -20,13 +20,13 @@ develop = [
 release = ["log/release_max_level_off", "rrr_game/release"]
 
 [dependencies]
-anyhow = "1.0.82"
-log = "0.4.21"
+anyhow = "1.0"
+log = "0.4"
 rrr_config = { path = "../rrr_config" }
 rrr_game = { path = "../rrr_game" }
 rrr_input = { path = "../rrr_input" }
 rrr_time = { path = "../rrr_time" }
-serde = { version = "1.0.200", features = ["derive"] }
+serde = { version = "1.0.201", features = ["derive"] }
 
 [target.'cfg(unix)'.dependencies]
 winit = { version = "0.28", default-features = false, features = ['x11'] }

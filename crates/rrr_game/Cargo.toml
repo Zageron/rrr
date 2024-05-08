@@ -16,8 +16,8 @@ develop = ["log/max_level_info", "log/release_max_level_info"]
 release = ["log/release_max_level_off"]
 
 [dependencies]
-anyhow = "1.0.82"
-log = "0.4.21"
+anyhow = "1.0"
+log = "0.4"
 rrr_core = { path = "../rrr_core" }
 rrr_input = { path = "../rrr_input" }
 rrr_noteskin = { path = "../rrr_noteskin" }

@@ -18,13 +18,13 @@ sm = []
 
 
 [dependencies]
-anyhow = "1.0.82"
-log = "0.4.21"
+anyhow = "1.0"
+log = "0.4"
 rrr_types = { path = "../rrr_types" }
-serde = { version = "1.0.200", features = ["derive"] }
+serde = { version = "1.0.201", features = ["derive"] }
 strum = { version = "0.26.2", features = ["derive"] }
 swf = { version = "0.2", optional = true }
-thiserror = "1.0.59"
+thiserror = "1.0"
 
 
 [dev-dependencies]
