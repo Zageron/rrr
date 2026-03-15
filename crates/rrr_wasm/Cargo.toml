@@ -26,7 +26,7 @@ console_error_panic_hook = "0.1"
 console_log = "1.0"
 js-sys = "0.3"
 log = "0.4"
-pixels = "0.13"
+pixels = "0.15"
 rrr_bench = { path = "../rrr_bench", optional = true }
 rrr_fetch = { path = "../rrr_fetch" }
 rrr_game = { path = "../rrr_game" }
