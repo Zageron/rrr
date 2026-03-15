@@ -10,7 +10,7 @@ homepage = "https://github.com/flashflashrevolution/rrr"
 repository = "https://github.com/flashflashrevolution/rrr"
 readme = "readme.markdown"
 license = "AGPL-3.0"
-edition = "2021"
+edition = "2024"
 publish = false
 rust-version = "1.66.0"
 
