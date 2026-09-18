@@ -14,7 +14,7 @@ rust-version = "1.66.0"
 
 [dependencies]
 anyhow = "1.0"
-dasp = { git = "https://github.com/RustAudio/dasp", rev = "6b15274b471835e586089e54228e54601f92d391", features = [
+dasp = { git = "https://github.com/RustAudio/dasp", rev = "d0892971a3b72dee9b3ff0d16f94b0962605e858", features = [
     "interpolate",
     "interpolate-linear",
     "signal",
